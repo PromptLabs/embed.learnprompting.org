@@ -2,7 +2,9 @@ import { Button, Flex, Mark, Space, Text, Title } from "@mantine/core"
 import { FC, useState } from "react"
 import { BsFillPlayFill } from "react-icons/bs"
 import { useAsyncMemo } from "../hooks/useAsyncMemo"
-import { decodeUrlConfig } from "../urlconfig"
+import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
+import { BASE_URL } from "../main"
+import { decodeUrlConfig, encodeUrlConfig } from "../urlconfig"
 
 type PromptEditorProps = { prompt: string; onGenerate: (prompt: string) => void }
 const PromptEditor: FC<PromptEditorProps> = ({ prompt: defaultPrompt, onGenerate }) => {
@@ -66,23 +68,7 @@ const Footer = ({ editUrl }: { editUrl: string }) => {
 }
 
 const EmbedPage = () => {
-    const { value: config, error } = useAsyncMemo(
-        async () => {
-            const params = new URLSearchParams(window.location.search)
-            const config = params.get("config")
-            if (config == null) {
-                throw new Error(`query param "config" does not exist in url`)
-            }
-
-            try {
-                return decodeUrlConfig(config)
-            } catch (error) {
-                throw new Error(`failed to parse config`, { cause: error })
-            }
-        },
-        [],
-        null
-    )
+    const { value: config, error } = useSearchParamConfig()
 
     const handleGenerate = () => {}
 
@@ -91,13 +77,14 @@ const EmbedPage = () => {
         return <span>error: {error.message}</span>
     }
     if (config == null) {
+        // TODO: make look nicer
         return <span>loading...</span>
     }
     return (
         <Flex direction="column" h="100vh">
             <Playground prompt={config.prompt} onGenerate={handleGenerate} />
             <Space mt="auto" />
-            <Footer editUrl="lol.com" />
+            <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
         </Flex>
     )
 }

@@ -1,6 +1,6 @@
 import { DependencyList, useEffect, useState } from "react"
 
-type UseAsyncMemoResult<T> = {
+export type UseAsyncMemoResult<T> = {
     value: T
     error: Error | null
 }

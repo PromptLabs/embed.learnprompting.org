@@ -5,6 +5,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom"
 import EmbedPage from "./pages/EmbedPage"
 import HomePage from "./pages/HomePage"
 
+export const BASE_URL = `${window.location.protocol}//${window.location.host}`
+
 const router = createBrowserRouter([
     {
         path: "/",

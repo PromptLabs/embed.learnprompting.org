@@ -12,12 +12,12 @@ export const urlConfigSchema = yup.object({
             "text-ada-001",
         ])
         .default("text-davinci-003"),
-    prompt: yup.string().required(),
+    prompt: yup.string().default(""),
 })
 export type UrlConfig = yup.InferType<typeof urlConfigSchema>
 
 export const decodeUrlConfig = async (config: string): Promise<UrlConfig> => {
-    return urlConfigSchema.validate(decodeURIComponent(atob(config)))
+    return urlConfigSchema.validate(JSON.parse(decodeURIComponent(atob(config))))
 }
 
 export const encodeUrlConfig = (obj: UrlConfig): string => {
