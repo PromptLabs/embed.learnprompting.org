@@ -7,7 +7,7 @@ const PromptEditor = () => {
             <Title order={2}>Prompt</Title>
             <textarea
                 placeholder="Write your prompt here"
-                style={{ flexBasis: "100%", flexShrink: 1, boxSizing: "border-box" }}
+                style={{ flexBasis: "100%", flexShrink: 1, boxSizing: "border-box", resize: "none" }}
             />
             <Button size="lg" leftIcon={<BsFillPlayFill size="2rem" />}>
                 Generate
