@@ -1,8 +1,8 @@
-import { Anchor, AppShell, Box, Button, Flex, Mark, ScrollArea, Space, Text, Textarea, Title } from "@mantine/core"
-import { FC, useEffect, useMemo, useState } from "react"
+import { Button, Flex, Mark, Space, Text, Title } from "@mantine/core"
+import { FC, useState } from "react"
 import { BsFillPlayFill } from "react-icons/bs"
 import { useAsyncMemo } from "../hooks/useAsyncMemo"
-import { decodeUrlConfig, UrlConfig } from "../urlconfig"
+import { decodeUrlConfig } from "../urlconfig"
 
 type PromptEditorProps = { prompt: string; onGenerate: (prompt: string) => void }
 const PromptEditor: FC<PromptEditorProps> = ({ prompt: defaultPrompt, onGenerate }) => {
