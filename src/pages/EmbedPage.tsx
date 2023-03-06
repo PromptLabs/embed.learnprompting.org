@@ -1,4 +1,5 @@
-import { Anchor, AppShell, Box, Flex, Mark, ScrollArea, Space, Text, Textarea, Title } from "@mantine/core"
+import { Anchor, AppShell, Box, Button, Flex, Mark, ScrollArea, Space, Text, Textarea, Title } from "@mantine/core"
+import { BsFillPlayFill } from "react-icons/bs"
 
 const PromptEditor = () => {
     return (
@@ -8,6 +9,9 @@ const PromptEditor = () => {
                 placeholder="Write your prompt here"
                 style={{ flexBasis: "100%", flexShrink: 1, boxSizing: "border-box" }}
             />
+            <Button size="lg" leftIcon={<BsFillPlayFill size="2rem" />}>
+                Generate
+            </Button>
         </>
     )
 }
@@ -29,11 +33,11 @@ const OutputDisplay = ({ output }: { output: string }) => {
 const Playground = () => {
     return (
         <Flex direction="row" p="sm" h="100%">
-            <Flex direction="column" w="50%">
+            <Flex direction="column" w="50%" gap="xs">
                 <PromptEditor />
             </Flex>
             <Space p="xs" />
-            <Flex direction="column" w="50%">
+            <Flex direction="column" w="50%" gap="xs">
                 <OutputDisplay output="test output test output test output test output test output test output test output test output test output test output test output test output test output " />
             </Flex>
         </Flex>
