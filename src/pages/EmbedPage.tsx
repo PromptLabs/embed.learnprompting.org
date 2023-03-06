@@ -1,10 +1,13 @@
-import { Anchor, AppShell, Box, Flex, Mark, ScrollArea, Space, Text, Textarea } from "@mantine/core"
+import { Anchor, AppShell, Box, Flex, Mark, ScrollArea, Space, Text, Textarea, Title } from "@mantine/core"
 
 const PromptEditor = () => {
     return (
         <>
-            <Text>Prompt</Text>
-            <textarea style={{ flexBasis: "100%", flexShrink: 1, boxSizing: "border-box" }} />
+            <Title order={2}>Prompt</Title>
+            <textarea
+                placeholder="Write your prompt here"
+                style={{ flexBasis: "100%", flexShrink: 1, boxSizing: "border-box" }}
+            />
         </>
     )
 }
@@ -12,10 +15,9 @@ const PromptEditor = () => {
 const OutputDisplay = ({ output }: { output: string }) => {
     return (
         <>
-            <Text>Output</Text>
+            <Title order={2}>Output</Title>
             <Mark
-                color="cyan"
-                w="fit-content"
+                color="green"
                 style={{ overflowWrap: "break-word", whiteSpace: "pre-wrap", boxDecorationBreak: "clone" }}
             >
                 {output}
