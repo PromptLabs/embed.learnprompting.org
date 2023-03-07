@@ -18,11 +18,10 @@ const createEmbedCode = (config: UrlConfig): string => {
 }
 
 const HomePage = () => {
-    const defaultConfig: UrlConfig = {
+    const [config, setConfig] = useState<UrlConfig>({
         model: "text-davinci-003",
         prompt: "",
-    }
-    const [config, setConfig] = useState(defaultConfig)
+    })
     const htmlCode = useMemo(() => createEmbedCode(config), [config])
 
     const { value: parsedConfig, error } = useSearchParamConfig()
