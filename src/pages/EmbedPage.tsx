@@ -20,7 +20,7 @@ const PromptEditor: FC<PromptEditorProps> = ({ prompt: defaultPrompt, onGenerate
                 value={prompt ?? ""}
                 onChange={(event) => setPrompt(event.currentTarget.value)}
             />
-            <Button size="lg" leftIcon={<BsFillPlayFill size="2rem" />} onClick={() => onGenerate(prompt)}>
+            <Button size="lg" leftIcon={<BsFillPlayFill size="2rem" />} onClick={() => onGenerate(prompt ?? "")}>
                 Generate
             </Button>
         </>
