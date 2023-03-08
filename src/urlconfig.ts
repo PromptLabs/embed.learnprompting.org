@@ -16,9 +16,8 @@ export const urlConfigSchema = yup.object({
 })
 export type UrlConfig = yup.InferType<typeof urlConfigSchema>
 
-export const decodeUrlConfig = async (config: string): Promise<UrlConfig> => {
-    return urlConfigSchema.validate(JSON.parse(decodeURIComponent(atob(config))))
-}
+export const decodeUrlConfig = async (config: string): Promise<UrlConfig> =>
+    urlConfigSchema.validate(JSON.parse(decodeURIComponent(atob(config))))
 
 export const encodeUrlConfig = (obj: UrlConfig): string => {
     return encodeURIComponent(btoa(JSON.stringify(obj)))

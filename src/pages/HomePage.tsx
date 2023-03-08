@@ -1,4 +1,5 @@
-import { Flex, Text, Textarea, Title } from "@mantine/core"
+import { Box, Flex, Text, Textarea, Title } from "@mantine/core"
+import { useDebouncedValue } from "@mantine/hooks"
 import { Prism } from "@mantine/prism"
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
@@ -22,7 +23,8 @@ const HomePage = () => {
         model: "text-davinci-003",
         prompt: "",
     })
-    const htmlCode = useMemo(() => createEmbedCode(config), [config])
+    const [debouncedConfig] = useDebouncedValue(config, 750)
+    const htmlCode = useMemo(() => createEmbedCode(debouncedConfig), [debouncedConfig])
 
     const { value: parsedConfig, error } = useSearchParamConfig()
     useEffect(() => {
@@ -39,18 +41,27 @@ const HomePage = () => {
         console.error("failed to load config from url", error)
     }
     return (
-        <Flex direction="column">
-            <Title order={2}>Create an Embed</Title>
-            <Text>Prompt</Text>
-            <Textarea
-                value={config.prompt}
-                onChange={(event) => setConfig({ ...config, prompt: event.currentTarget.value })}
-            />
-
-            <Title order={2}>Embed HTML Code</Title>
-            <Prism language="markup" withLineNumbers>
-                {htmlCode}
-            </Prism>
+        <Flex direction="row" p="xs" gap="md">
+            <Flex direction="column" w="50%" gap="md">
+                <Box>
+                    <Title order={3}>Preview</Title>
+                    <Box style={{ border: "1px black dashed" }} dangerouslySetInnerHTML={{ __html: htmlCode }}></Box>
+                </Box>
+                <Box>
+                    <Title order={3}>HTML Code</Title>
+                    <Prism language="markup" withLineNumbers>
+                        {htmlCode}
+                    </Prism>
+                </Box>
+            </Flex>
+            <Flex direction="column" gap="md">
+                <Title order={3}>Configuration</Title>
+                <Text>Prompt</Text>
+                <Textarea
+                    value={config.prompt}
+                    onChange={(event) => setConfig({ ...config, prompt: event.currentTarget.value })}
+                />
+            </Flex>
         </Flex>
     )
 }

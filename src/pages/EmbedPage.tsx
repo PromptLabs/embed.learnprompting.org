@@ -1,14 +1,16 @@
-import { Button, Flex, Mark, Space, Text, Title } from "@mantine/core"
-import { FC, useState } from "react"
+import { Box, Button, Flex, LoadingOverlay, Mark, Space, Text, Title } from "@mantine/core"
+import { FC, useEffect, useState } from "react"
 import { BsFillPlayFill } from "react-icons/bs"
-import { useAsyncMemo } from "../hooks/useAsyncMemo"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
-import { decodeUrlConfig, encodeUrlConfig } from "../urlconfig"
+import { encodeUrlConfig } from "../urlconfig"
 
-type PromptEditorProps = { prompt: string; onGenerate: (prompt: string) => void }
+type PromptEditorProps = { prompt?: string; onGenerate: (prompt: string) => void }
 const PromptEditor: FC<PromptEditorProps> = ({ prompt: defaultPrompt, onGenerate }) => {
     const [prompt, setPrompt] = useState(defaultPrompt)
+    useEffect(() => {
+        setPrompt(defaultPrompt)
+    }, [defaultPrompt])
     return (
         <>
             <Title order={2}>Prompt</Title>
@@ -16,7 +18,7 @@ const PromptEditor: FC<PromptEditorProps> = ({ prompt: defaultPrompt, onGenerate
                 placeholder="Write your prompt here"
                 style={{ flexBasis: "100%", flexShrink: 1, boxSizing: "border-box", resize: "none" }}
                 value={prompt ?? ""}
-                onSubmit={(event) => setPrompt(event.currentTarget.value)}
+                onChange={(event) => setPrompt(event.currentTarget.value)}
             />
             <Button size="lg" leftIcon={<BsFillPlayFill size="2rem" />} onClick={() => onGenerate(prompt)}>
                 Generate
@@ -76,16 +78,15 @@ const EmbedPage = () => {
         console.error("failed to parse config", error)
         return <span>error: {error.message}</span>
     }
-    if (config == null) {
-        // TODO: make look nicer
-        return <span>loading...</span>
-    }
     return (
-        <Flex direction="column" h="100vh">
-            <Playground prompt={config.prompt} onGenerate={handleGenerate} />
-            <Space mt="auto" />
-            <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
-        </Flex>
+        <Box pos="relative">
+            <LoadingOverlay visible={config == null} overlayBlur={2} />
+            <Flex direction="column" h="100vh">
+                <Playground prompt={config?.prompt} onGenerate={handleGenerate} />
+                <Space mt="auto" />
+                <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
+            </Flex>
+        </Box>
     )
 }
 
