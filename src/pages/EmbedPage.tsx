@@ -18,8 +18,12 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
         setOutput(config.output)
     }, [config])
 
-    const handleGenerate = () => {}
-
+    const handleGenerate = () => {
+        // config must be loaded in order to generate
+        if (config == null) {
+            return
+        }
+    }
     return (
         <Flex direction="row" p="sm" h="100%">
             <Flex direction="column" w="50%" gap="xs">
@@ -30,7 +34,12 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
                     value={prompt}
                     onChange={(event) => setPrompt(event.currentTarget.value)}
                 />
-                <Button size="lg" leftIcon={<BsFillPlayFill size="2rem" />} onClick={handleGenerate}>
+                <Button
+                    size="lg"
+                    leftIcon={<BsFillPlayFill size="2rem" />}
+                    onClick={handleGenerate}
+                    disabled={config == null}
+                >
                     Generate
                 </Button>
             </Flex>
