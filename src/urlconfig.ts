@@ -13,6 +13,7 @@ export const urlConfigSchema = yup.object({
         ])
         .default("text-davinci-003"),
     prompt: yup.string().default(""),
+    output: yup.string().default(""),
 })
 export type UrlConfig = yup.InferType<typeof urlConfigSchema>
 
