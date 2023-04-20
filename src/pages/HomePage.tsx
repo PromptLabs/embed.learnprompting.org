@@ -27,7 +27,7 @@ const HomePage = () => {
     const debouncedConfig = useDebounce(config, 750)
     const htmlCode = useMemo(() => createEmbedCode(debouncedConfig), [debouncedConfig])
 
-    const { value: parsedConfig, error } = useSearchParamConfig()
+    const { value: parsedConfig, error } = useSearchParamConfig(true)
     useEffect(() => {
         if (error != null) {
             toast({
