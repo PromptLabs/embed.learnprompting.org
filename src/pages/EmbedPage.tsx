@@ -38,8 +38,8 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
         }
     }
     return (
-        <Flex direction="row" p="2" h="100%" gap="5">
-            <Flex direction="column" w="50%" gap="3">
+        <Flex direction={{ base: "column", sm: "row" }} p="2" h="100%" gap="5">
+            <Flex direction="column" gap="3" flex="1 1 0px">
                 <Heading size="md">Prompt</Heading>
                 <Textarea
                     placeholder="Write your prompt here"
@@ -62,7 +62,7 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
                     </Button>
                 </LightMode>
             </Flex>
-            <Flex direction="column" w="50%" gap="3">
+            <Flex direction="column" gap="3" flex="1 1 0px">
                 <Heading size="md">Output</Heading>
                 <Mark
                     backgroundColor="green.100"
@@ -79,7 +79,7 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
 
 const Footer = ({ editUrl }: { editUrl: string }) => {
     return (
-        <Flex direction="row" p="sm" textDecoration="underline" backgroundColor="gray.700" padding="2">
+        <Flex p="sm" textDecoration="underline" backgroundColor="gray.700" padding="2" fontSize="sm">
             <Link href="https://learnprompting.org" isExternal>
                 learnprompting.org
             </Link>

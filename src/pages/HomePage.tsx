@@ -50,8 +50,8 @@ const HomePage = () => {
     }
 
     return (
-        <Flex direction="row" p="2" gap="5">
-            <Flex direction="column" w="50%" gap="5">
+        <Flex direction={{ base: "column", md: "row" }} p="2" gap="5">
+            <Flex direction="column" gap="5" flex="1 1 0px" maxW={{ base: "100%", md: "50%" }}>
                 <Flex direction="column" gap="2">
                     <Heading size="xl">Preview</Heading>
                     <Box
@@ -65,12 +65,13 @@ const HomePage = () => {
                     <PrismHighlight code={htmlCode} language="markup" />
                 </Box>
             </Flex>
-            <Flex direction="column" gap="3">
+            <Flex direction="column" gap="3" flex="1 1 0px">
                 <Heading size="xl">Configuration</Heading>
                 <Text>Prompt</Text>
                 <Textarea
                     value={config.prompt}
                     onChange={(event) => setConfig({ ...config, prompt: event.currentTarget.value })}
+                    resize="none"
                 />
             </Flex>
         </Flex>
