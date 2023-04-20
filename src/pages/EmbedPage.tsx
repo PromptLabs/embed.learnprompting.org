@@ -1,10 +1,23 @@
-import { Alert, Box, Button, Flex, LoadingOverlay, Mark, Space, Text, Title } from "@mantine/core"
 import { useEffect, useState } from "react"
 import { BsFillPlayFill } from "react-icons/bs"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
 import { encodeUrlConfig, UrlConfig } from "../urlconfig"
-import { FiAlertCircle } from "react-icons/fi"
+import {
+    Flex,
+    Button,
+    Mark,
+    Alert,
+    Heading,
+    Text,
+    Link,
+    AlertDescription,
+    AlertIcon,
+    AlertTitle,
+    Box,
+    Spacer,
+    Textarea,
+} from "@chakra-ui/react"
 
 const Playground = ({ config }: { config: UrlConfig | null }) => {
     const [prompt, setPrompt] = useState<string>("")
@@ -27,10 +40,13 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
     return (
         <Flex direction="row" p="sm" h="100%">
             <Flex direction="column" w="50%" gap="xs">
-                <Title order={2}>Prompt</Title>
-                <textarea
+                <Heading size="xl">Prompt</Heading>
+                <Textarea
                     placeholder="Write your prompt here"
-                    style={{ flexBasis: "100%", flexShrink: 1, boxSizing: "border-box", resize: "none" }}
+                    flexBasis="100%"
+                    flexShrink="1"
+                    boxSizing="border-box"
+                    resize="none"
                     value={prompt}
                     onChange={(event) => setPrompt(event.currentTarget.value)}
                 />
@@ -43,9 +59,8 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
                     Generate
                 </Button>
             </Flex>
-            <Space p="xs" />
             <Flex direction="column" w="50%" gap="xs">
-                <Title order={2}>Output</Title>
+                <Heading size="xl">Output</Heading>
                 <Mark
                     color="green"
                     style={{ overflowWrap: "break-word", whiteSpace: "pre-wrap", boxDecorationBreak: "clone" }}
@@ -59,14 +74,14 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
 
 const Footer = ({ editUrl }: { editUrl: string }) => {
     return (
-        <Flex direction="row" p="sm" td="underline">
-            <Text component="a" href="https://learnprompting.org" target="_blank">
+        <Flex direction="row" p="sm" textDecoration="underline">
+            <Link href="https://learnprompting.org" isExternal>
                 learnprompting.org
-            </Text>
-            <Space ml="auto" />
-            <Text component="a" href={editUrl} target="_blank">
+            </Link>
+            <Spacer />
+            <Link href={editUrl} isExternal>
                 edit this embed
-            </Text>
+            </Link>
         </Flex>
     )
 }
@@ -77,17 +92,19 @@ const EmbedPage = () => {
     if (error != null) {
         console.error("failed to parse config", error)
         return (
-            <Alert icon={<FiAlertCircle size="1rem" />} title="Failed to load config" color="red">
-                Failed to load the provided config ({error.message}). Please check console for more information.
+            <Alert status="error">
+                <AlertIcon />
+                <AlertTitle>Failed to load config</AlertTitle>
+                <AlertDescription>
+                    Failed to load the provided config ({error.message}). Please check console for more information.
+                </AlertDescription>
             </Alert>
         )
     }
     return (
         <Box pos="relative">
-            <LoadingOverlay visible={config == null} overlayBlur={2} />
             <Flex direction="column" h="100vh">
                 <Playground config={config} />
-                <Space mt="auto" />
                 <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
             </Flex>
         </Box>

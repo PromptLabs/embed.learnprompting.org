@@ -1,10 +1,9 @@
-import { Box, Flex, Text, Textarea, Title } from "@mantine/core"
-import { useDebouncedValue } from "@mantine/hooks"
-import { Prism } from "@mantine/prism"
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
 import { encodeUrlConfig, UrlConfig } from "../urlconfig"
+import { useDebounce } from "usehooks-ts"
+import { Box, Flex, Heading, Text, Textarea } from "@chakra-ui/react"
 
 const HTML_TEMPLATE = `<iframe
     src="%URL%"
@@ -22,8 +21,9 @@ const HomePage = () => {
     const [config, setConfig] = useState<UrlConfig>({
         model: "text-davinci-003",
         prompt: "",
+        output: "",
     })
-    const [debouncedConfig] = useDebouncedValue(config, 750)
+    const debouncedConfig = useDebounce(config, 750)
     const htmlCode = useMemo(() => createEmbedCode(debouncedConfig), [debouncedConfig])
 
     const { value: parsedConfig, error } = useSearchParamConfig()
@@ -44,18 +44,18 @@ const HomePage = () => {
         <Flex direction="row" p="xs" gap="md">
             <Flex direction="column" w="50%" gap="md">
                 <Box>
-                    <Title order={3}>Preview</Title>
+                    <Heading size="xl">Preview</Heading>
                     <Box style={{ border: "1px black dashed" }} dangerouslySetInnerHTML={{ __html: htmlCode }}></Box>
                 </Box>
                 <Box>
-                    <Title order={3}>HTML Code</Title>
-                    <Prism language="markup" withLineNumbers>
-                        {htmlCode}
-                    </Prism>
+                    <Heading size="xl">HTML Code</Heading>
+                    {/* <Prism language="markup" withLineNumbers> */}
+                    {htmlCode}
+                    {/* </Prism> */}
                 </Box>
             </Flex>
             <Flex direction="column" gap="md">
-                <Title order={3}>Configuration</Title>
+                <Heading size="xl">Configuration</Heading>
                 <Text>Prompt</Text>
                 <Textarea
                     value={config.prompt}
