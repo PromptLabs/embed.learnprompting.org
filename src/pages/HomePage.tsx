@@ -73,7 +73,12 @@ const HomePage = () => {
                 </Box>
                 <Box>
                     <Text>Output</Text>
-                    <Textarea resize="none" placeholder="Type the output to display" />
+                    <Textarea
+                        value={config.output}
+                        onChange={(event) => setConfig({ ...config, output: event.currentTarget.value })}
+                        resize="none"
+                        placeholder="Type the output to display"
+                    />
                 </Box>
                 <Box>
                     <Text>Model</Text>
