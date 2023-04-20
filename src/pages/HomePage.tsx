@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
-import { encodeUrlConfig, MODELS, UrlConfig } from "../urlconfig"
+import { encodeUrlConfig, MODELS, UrlConfig, urlConfigSchema } from "../urlconfig"
 import { useDebounce } from "usehooks-ts"
 import { Box, Flex, Heading, Select, Text, Textarea, useToast } from "@chakra-ui/react"
 import PrismHighlight from "../components/PrismHighlight"
@@ -21,17 +21,14 @@ const createEmbedCode = (config: UrlConfig): string => {
 
 const HomePage = () => {
     const toast = useToast()
-    const [config, setConfig] = useState<UrlConfig>({
-        model: "text-davinci-003",
-        prompt: "",
-        output: "",
-    })
+    const [config, setConfig] = useState<UrlConfig>(urlConfigSchema.getDefault())
     const debouncedConfig = useDebounce(config, 750)
     const htmlCode = useMemo(() => createEmbedCode(debouncedConfig), [debouncedConfig])
 
-    const { value: parsedConfig, error } = useSearchParamConfig(true)
+    const { config: parsedConfig, error } = useSearchParamConfig()
     useEffect(() => {
         if (error != null) {
+            console.error("failed to load config from url", error)
             toast({
                 status: "error",
                 title: "Failed to load URL config",
@@ -46,9 +43,6 @@ const HomePage = () => {
             setConfig(parsedConfig)
         }
     }, [parsedConfig, error])
-    if (error != null) {
-        console.error("failed to load config from url", error)
-    }
 
     return (
         <Flex direction={{ base: "column", md: "row" }} p="2" gap="5">
@@ -89,9 +83,30 @@ const HomePage = () => {
                         ))}
                     </Select>
                 </Box>
-                <ConfigNumberInput name="Max Tokens" value={5} min={1} max={4000} step={1} onChange={() => {}} />
-                <ConfigNumberInput name="Temperature" value={0.2} min={0} max={1} step={0.1} onChange={() => {}} />
-                <ConfigNumberInput name="Top P" value={0.3} min={0} max={1} step={0.1} onChange={() => {}} />
+                <ConfigNumberInput
+                    name="Max Tokens"
+                    value={config.maxTokens}
+                    min={1}
+                    max={4000}
+                    step={1}
+                    onChange={(maxTokens) => setConfig({ ...config, maxTokens })}
+                />
+                <ConfigNumberInput
+                    name="Temperature"
+                    value={config.temperature}
+                    min={0}
+                    max={1}
+                    step={0.1}
+                    onChange={(temperature) => setConfig({ ...config, temperature })}
+                />
+                <ConfigNumberInput
+                    name="Top P"
+                    value={config.topP}
+                    min={0}
+                    max={1}
+                    step={0.1}
+                    onChange={(topP) => setConfig({ ...config, topP })}
+                />
             </Flex>
         </Flex>
     )

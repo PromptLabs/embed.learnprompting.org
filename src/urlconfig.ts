@@ -13,11 +13,14 @@ export const urlConfigSchema = yup.object({
     model: yup.string().oneOf(MODELS).default(MODELS[0]),
     prompt: yup.string().default(""),
     output: yup.string().default(""),
+    maxTokens: yup.number().integer().min(1).max(4000).default(256),
+    temperature: yup.number().min(0).max(1).default(0.7),
+    topP: yup.number().min(0).max(1).default(1),
 })
 export type UrlConfig = yup.InferType<typeof urlConfigSchema>
 
-export const decodeUrlConfig = async (config: string): Promise<UrlConfig> =>
-    urlConfigSchema.validate(JSON.parse(decodeURIComponent(atob(config))))
+export const decodeUrlConfig = (config: string): UrlConfig =>
+    urlConfigSchema.validateSync(JSON.parse(atob(decodeURIComponent(config))))
 
 export const encodeUrlConfig = (obj: UrlConfig): string => {
     return encodeURIComponent(btoa(JSON.stringify(obj)))

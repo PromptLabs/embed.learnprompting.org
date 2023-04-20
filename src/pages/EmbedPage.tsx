@@ -19,11 +19,11 @@ import {
     LightMode,
 } from "@chakra-ui/react"
 
-const Playground = ({ config }: { config: UrlConfig | null }) => {
+const Playground = ({ config }: { config?: UrlConfig }) => {
     const [prompt, setPrompt] = useState<string>("")
     const [output, setOutput] = useState<string>("")
     useEffect(() => {
-        if (config == null) {
+        if (!config) {
             return
         }
 
@@ -92,7 +92,7 @@ const Footer = ({ editUrl }: { editUrl: string }) => {
 }
 
 const EmbedPage = () => {
-    const { value: config, error } = useSearchParamConfig()
+    const { config, error } = useSearchParamConfig()
 
     if (error != null) {
         console.error("failed to parse config", error)
