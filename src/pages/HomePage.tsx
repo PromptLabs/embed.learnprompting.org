@@ -4,6 +4,8 @@ import { BASE_URL } from "../main"
 import { encodeUrlConfig, UrlConfig } from "../urlconfig"
 import { useDebounce } from "usehooks-ts"
 import { Box, Flex, Heading, Text, Textarea, useToast } from "@chakra-ui/react"
+import Highlight, { defaultProps } from "prism-react-renderer"
+import theme from "prism-react-renderer/themes/nightOwl"
 
 const HTML_TEMPLATE = `<iframe
     src="%URL%"
@@ -49,20 +51,42 @@ const HomePage = () => {
     }
 
     return (
-        <Flex direction="row" p="xs" gap="md">
-            <Flex direction="column" w="50%" gap="md">
-                <Box>
+        <Flex direction="row" p="2" gap="5">
+            <Flex direction="column" w="50%" gap="5">
+                <Flex direction="column" gap="2">
                     <Heading size="xl">Preview</Heading>
-                    <Box style={{ border: "1px black dashed" }} dangerouslySetInnerHTML={{ __html: htmlCode }}></Box>
-                </Box>
+                    <Box
+                        border="1px white dashed"
+                        borderRadius="5"
+                        dangerouslySetInnerHTML={{ __html: htmlCode }}
+                    ></Box>
+                </Flex>
                 <Box>
                     <Heading size="xl">HTML Code</Heading>
-                    {/* <Prism language="markup" withLineNumbers> */}
-                    {htmlCode}
-                    {/* </Prism> */}
+                    <Highlight {...defaultProps} code={htmlCode} language="markup" theme={theme}>
+                        {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                            <Box
+                                as="pre"
+                                p="3"
+                                borderRadius="5"
+                                overflowY="hidden"
+                                _hover={{ overflowY: "scroll" }}
+                                className={className}
+                                style={style}
+                            >
+                                {tokens.map((line, i) => (
+                                    <div {...getLineProps({ line, key: i })}>
+                                        {line.map((token, key) => (
+                                            <span {...getTokenProps({ token, key })} />
+                                        ))}
+                                    </div>
+                                ))}
+                            </Box>
+                        )}
+                    </Highlight>
                 </Box>
             </Flex>
-            <Flex direction="column" gap="md">
+            <Flex direction="column" gap="3">
                 <Heading size="xl">Configuration</Heading>
                 <Text>Prompt</Text>
                 <Textarea

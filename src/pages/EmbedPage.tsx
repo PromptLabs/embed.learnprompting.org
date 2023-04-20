@@ -9,7 +9,6 @@ import {
     Mark,
     Alert,
     Heading,
-    Text,
     Link,
     AlertDescription,
     AlertIcon,
@@ -41,7 +40,7 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
     return (
         <Flex direction="row" p="2" h="100%" gap="5">
             <Flex direction="column" w="50%" gap="3">
-                <Heading size="xl">Prompt</Heading>
+                <Heading size="md">Prompt</Heading>
                 <Textarea
                     placeholder="Write your prompt here"
                     flexBasis="100%"
@@ -64,7 +63,7 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
                 </LightMode>
             </Flex>
             <Flex direction="column" w="50%" gap="3">
-                <Heading size="xl">Output</Heading>
+                <Heading size="md">Output</Heading>
                 <Mark
                     backgroundColor="green.100"
                     overflowWrap="break-word"
