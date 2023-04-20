@@ -17,6 +17,7 @@ import {
     Box,
     Spacer,
     Textarea,
+    LightMode,
 } from "@chakra-ui/react"
 
 const Playground = ({ config }: { config: UrlConfig | null }) => {
@@ -38,8 +39,8 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
         }
     }
     return (
-        <Flex direction="row" p="sm" h="100%">
-            <Flex direction="column" w="50%" gap="xs">
+        <Flex direction="row" p="2" h="100%" gap="5">
+            <Flex direction="column" w="50%" gap="3">
                 <Heading size="xl">Prompt</Heading>
                 <Textarea
                     placeholder="Write your prompt here"
@@ -50,20 +51,25 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
                     value={prompt}
                     onChange={(event) => setPrompt(event.currentTarget.value)}
                 />
-                <Button
-                    size="lg"
-                    leftIcon={<BsFillPlayFill size="2rem" />}
-                    onClick={handleGenerate}
-                    disabled={config == null}
-                >
-                    Generate
-                </Button>
+                <LightMode>
+                    <Button
+                        size="lg"
+                        leftIcon={<BsFillPlayFill size="2rem" />}
+                        onClick={handleGenerate}
+                        disabled={config == null}
+                        colorScheme="red"
+                    >
+                        Generate
+                    </Button>
+                </LightMode>
             </Flex>
-            <Flex direction="column" w="50%" gap="xs">
+            <Flex direction="column" w="50%" gap="3">
                 <Heading size="xl">Output</Heading>
                 <Mark
-                    color="green"
-                    style={{ overflowWrap: "break-word", whiteSpace: "pre-wrap", boxDecorationBreak: "clone" }}
+                    backgroundColor="green.100"
+                    overflowWrap="break-word"
+                    whiteSpace="pre-wrap"
+                    boxDecorationBreak="clone"
                 >
                     {output}
                 </Mark>
@@ -74,7 +80,7 @@ const Playground = ({ config }: { config: UrlConfig | null }) => {
 
 const Footer = ({ editUrl }: { editUrl: string }) => {
     return (
-        <Flex direction="row" p="sm" textDecoration="underline">
+        <Flex direction="row" p="sm" textDecoration="underline" backgroundColor="gray.700" padding="2">
             <Link href="https://learnprompting.org" isExternal>
                 learnprompting.org
             </Link>
