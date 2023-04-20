@@ -3,7 +3,7 @@ import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
 import { encodeUrlConfig, UrlConfig } from "../urlconfig"
 import { useDebounce } from "usehooks-ts"
-import { Box, Flex, Heading, Text, Textarea } from "@chakra-ui/react"
+import { Box, Flex, Heading, Text, Textarea, useToast } from "@chakra-ui/react"
 
 const HTML_TEMPLATE = `<iframe
     src="%URL%"
@@ -18,6 +18,7 @@ const createEmbedCode = (config: UrlConfig): string => {
 }
 
 const HomePage = () => {
+    const toast = useToast()
     const [config, setConfig] = useState<UrlConfig>({
         model: "text-davinci-003",
         prompt: "",
@@ -28,18 +29,25 @@ const HomePage = () => {
 
     const { value: parsedConfig, error } = useSearchParamConfig()
     useEffect(() => {
+        if (error != null) {
+            toast({
+                status: "error",
+                title: "Failed to load URL config",
+                description: "Using default config. Check console for more information.",
+            })
+        }
+
         // note that we don't check here at all of the user started editing
         // anything... thats really an edge case though. useSearchParamConfig
         // should be instant
         if (parsedConfig != null) {
             setConfig(parsedConfig)
         }
-    }, [parsedConfig])
-
+    }, [parsedConfig, error])
     if (error != null) {
-        // TODO: should we notify the user that this happened visually?
         console.error("failed to load config from url", error)
     }
+
     return (
         <Flex direction="row" p="xs" gap="md">
             <Flex direction="column" w="50%" gap="md">
