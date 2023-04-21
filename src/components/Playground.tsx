@@ -69,6 +69,7 @@ const Playground = ({
                     overflowWrap="break-word"
                     whiteSpace="pre-wrap"
                     boxDecorationBreak="clone"
+                    padding="1"
                 >
                     {config.output}
                 </Mark>
