@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { ElementType, ReactNode, useEffect, useState } from "react"
 import { BsFillPlayFill } from "react-icons/bs"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
@@ -17,19 +17,17 @@ import {
     Spacer,
     Textarea,
     LightMode,
+    Icon,
+    Tooltip,
+    HStack,
 } from "@chakra-ui/react"
+import { BsDot, BsFire } from "react-icons/bs"
+import { MdGeneratingTokens } from "react-icons/md"
+import { AiOutlineVerticalAlignTop } from "react-icons/ai"
 
-const Playground = ({ config }: { config?: UrlConfig }) => {
-    const [prompt, setPrompt] = useState<string>("")
-    const [output, setOutput] = useState<string>("")
-    useEffect(() => {
-        if (!config) {
-            return
-        }
-
-        setPrompt(config.prompt)
-        setOutput(config.output)
-    }, [config])
+const Playground = ({ config }: { config: UrlConfig }) => {
+    const [prompt, setPrompt] = useState(config.prompt)
+    const [output, setOutput] = useState(config.output)
 
     const handleGenerate = () => {
         // config must be loaded in order to generate
@@ -37,6 +35,13 @@ const Playground = ({ config }: { config?: UrlConfig }) => {
             return
         }
     }
+
+    const configDisplayElements: { label: string; data: ReactNode; icon?: ElementType }[] = [
+        { label: "OpenAI Model", data: config.model },
+        { label: "Max Tokens", data: config.maxTokens, icon: MdGeneratingTokens },
+        { label: "Temperature", data: config.temperature, icon: BsFire },
+        { label: "Top P", data: config.topP, icon: AiOutlineVerticalAlignTop },
+    ]
     return (
         <Flex direction={{ base: "column", sm: "row" }} p="2" gap="5" minH="0" h="100%">
             <Flex direction="column" gap="3" flex="1 1 0">
@@ -61,6 +66,18 @@ const Playground = ({ config }: { config?: UrlConfig }) => {
                         Generate
                     </Button>
                 </LightMode>
+                <Flex direction="row" alignItems="center" justifyContent="center" fontSize="xs" gap="1">
+                    {configDisplayElements
+                        .map<ReactNode>(({ label, data, icon }) => (
+                            <Tooltip label={label} placement="top" hasArrow>
+                                <HStack>
+                                    {icon && <Icon as={icon} />}
+                                    <span>{data}</span>
+                                </HStack>
+                            </Tooltip>
+                        ))
+                        .reduce((acc, elem) => [acc, <Icon as={BsDot} />, elem])}
+                </Flex>
             </Flex>
             <Flex direction="column" gap="3" flex="1 1 0" overflow="auto">
                 <Heading size="md">Output</Heading>
@@ -94,7 +111,16 @@ const Footer = ({ editUrl }: { editUrl: string }) => {
 const EmbedPage = () => {
     const { config, error } = useSearchParamConfig()
 
-    if (error != null) {
+    if (!config) {
+        return (
+            <Alert status="error">
+                <AlertIcon />
+                <AlertTitle>Failed to load config</AlertTitle>
+                <AlertDescription>No config parameter was provided in the URL</AlertDescription>
+            </Alert>
+        )
+    }
+    if (!!error) {
         console.error("failed to parse config", error)
         return (
             <Alert status="error">
