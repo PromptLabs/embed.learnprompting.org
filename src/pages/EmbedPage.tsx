@@ -38,8 +38,8 @@ const Playground = ({ config }: { config?: UrlConfig }) => {
         }
     }
     return (
-        <Flex direction={{ base: "column", sm: "row" }} p="2" gap="5" minH="0">
-            <Flex direction="column" gap="3" flex="1 1 100%">
+        <Flex direction={{ base: "column", sm: "row" }} p="2" gap="5" minH="0" h="100%">
+            <Flex direction="column" gap="3" flex="1 1 0">
                 <Heading size="md">Prompt</Heading>
                 <Textarea
                     placeholder="Write your prompt here"
@@ -62,7 +62,7 @@ const Playground = ({ config }: { config?: UrlConfig }) => {
                     </Button>
                 </LightMode>
             </Flex>
-            <Flex direction="column" gap="3" flex="1 1 100%" overflow="auto">
+            <Flex direction="column" gap="3" flex="1 1 0" overflow="auto">
                 <Heading size="md">Output</Heading>
                 <Mark
                     backgroundColor="green.100"
