@@ -20,20 +20,45 @@ import {
     Icon,
     Tooltip,
     HStack,
+    useToast,
 } from "@chakra-ui/react"
 import { BsDot, BsFire } from "react-icons/bs"
 import { MdGeneratingTokens } from "react-icons/md"
 import { AiOutlineVerticalAlignTop } from "react-icons/ai"
 
-const Playground = ({ config }: { config: UrlConfig }) => {
+const Playground = ({
+    config,
+    onGenerate,
+}: {
+    config: UrlConfig
+    onGenerate: (config: UrlConfig, prompt: string) => Promise<string>
+}) => {
+    const toast = useToast()
+    const [generating, setGenerating] = useState(false)
     const [prompt, setPrompt] = useState(config.prompt)
     const [output, setOutput] = useState(config.output)
 
     const handleGenerate = () => {
-        // config must be loaded in order to generate
-        if (config == null) {
+        if (generating) {
             return
         }
+
+        setGenerating(true)
+        onGenerate(config, prompt)
+            .then((output) => {
+                setOutput(output)
+            })
+            .catch((err) => {
+                console.error("failed to generate", err)
+                toast({
+                    status: "error",
+                    title: "Failed to generate",
+                    description: "Unexpected error. Check console for more information.",
+                })
+            })
+            .finally(() => {
+                setGenerating(false)
+            })
     }
 
     const configDisplayElements: { label: string; data: ReactNode; icon?: ElementType }[] = [
@@ -54,6 +79,7 @@ const Playground = ({ config }: { config: UrlConfig }) => {
                     resize="none"
                     value={prompt}
                     onChange={(event) => setPrompt(event.currentTarget.value)}
+                    readOnly={generating}
                 />
                 <LightMode>
                     <Button
@@ -62,6 +88,8 @@ const Playground = ({ config }: { config: UrlConfig }) => {
                         onClick={handleGenerate}
                         disabled={config == null}
                         colorScheme="red"
+                        isLoading={generating}
+                        isDisabled={generating || prompt.length == 0}
                     >
                         Generate
                     </Button>
@@ -132,9 +160,13 @@ const EmbedPage = () => {
             </Alert>
         )
     }
+
+    const onGenerate = async (config: UrlConfig, prompt: string): Promise<string> => {
+        throw new Error("unimpkemented")
+    }
     return (
         <Flex direction="column" h="100vh">
-            <Playground config={config} />
+            <Playground config={config} onGenerate={onGenerate} />
             <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
         </Flex>
     )
