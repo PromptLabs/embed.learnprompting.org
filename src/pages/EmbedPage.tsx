@@ -38,8 +38,8 @@ const Playground = ({ config }: { config?: UrlConfig }) => {
         }
     }
     return (
-        <Flex direction={{ base: "column", sm: "row" }} p="2" h="100%" gap="5">
-            <Flex direction="column" gap="3" flex="1 1 0px">
+        <Flex direction={{ base: "column", sm: "row" }} p="2" gap="5" minH="0">
+            <Flex direction="column" gap="3" flex="1 1 100%">
                 <Heading size="md">Prompt</Heading>
                 <Textarea
                     placeholder="Write your prompt here"
@@ -62,7 +62,7 @@ const Playground = ({ config }: { config?: UrlConfig }) => {
                     </Button>
                 </LightMode>
             </Flex>
-            <Flex direction="column" gap="3" flex="1 1 0px">
+            <Flex direction="column" gap="3" flex="1 1 100%" overflow="auto">
                 <Heading size="md">Output</Heading>
                 <Mark
                     backgroundColor="green.100"
@@ -107,12 +107,10 @@ const EmbedPage = () => {
         )
     }
     return (
-        <Box pos="relative">
-            <Flex direction="column" h="100vh">
-                <Playground config={config} />
-                <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
-            </Flex>
-        </Box>
+        <Flex direction="column" h="100vh">
+            <Playground config={config} />
+            <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
+        </Flex>
     )
 }
 
