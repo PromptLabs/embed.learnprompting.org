@@ -56,6 +56,7 @@ const HomePage = () => {
     }, [parsedConfig, error])
 
     return (
+        <Box>
         <Flex direction={{ base: "column", md: "row" }} p="2" gap="5">
             <Flex direction="column" gap="5" flex="1 1 0px" maxW={{ base: "100%", md: "50%" }}>
                 <Flex direction="column" gap="2">
@@ -66,14 +67,6 @@ const HomePage = () => {
                         dangerouslySetInnerHTML={{ __html: htmlCode }}
                     ></Box>
                 </Flex>
-                <Box>
-                    <Heading size="xl">HTML Code</Heading>
-                    <PrismHighlight code={htmlCode} language="markup" />
-                </Box>
-                <Box>
-                    <Heading size="xl">HTML Code</Heading>
-                    <PrismHighlight code={jsxCode} language="markup" />
-                </Box>
             </Flex>
             <Flex direction="column" gap="3" flex="1 1 0px">
                 <Heading size="xl">Configuration</Heading>
@@ -129,6 +122,22 @@ const HomePage = () => {
                 />
             </Flex>
         </Flex>
+        <Flex direction={{ base: "column", md: "row" }} p="2" gap="5">
+            <Flex direction="column" gap="5" flex="1 1 0px" maxW={{ base: "100%", md: "50%" }}>
+                <Box>
+                    <Heading size="xl">HTML Code</Heading>
+                    <PrismHighlight code={htmlCode} language="markup" />
+                </Box>
+            </Flex>
+            <Flex direction="column" gap="5" flex="1 1 0px" maxW={{ base: "100%", md: "50%" }}>
+                <Box>
+                    <Heading size="xl" style={{display:"inline"}}>JSX Code</Heading><Heading style={{display:"inline"}} size="l"> (Use for learnprompting.org)</Heading>
+                    <PrismHighlight code={jsxCode} language="markup" />
+                </Box>
+            </Flex>
+        </Flex>
+        
+        </Box>
     )
 }
 
