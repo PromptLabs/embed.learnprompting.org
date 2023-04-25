@@ -13,17 +13,28 @@ const HTML_TEMPLATE = `<iframe
     sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
 ></iframe>`
 
-const createEmbedCode = (config: UrlConfig): string => {
+const JSX_TEMPLATE = `<iframe
+    src="%URL%"
+    style={{width:"100%", height:"500px", border:"0", borderRadius:"4px", overflow:"hidden"}}
+    sandbox="allow-forms allow-modals allow-popups allow-presentation allow-same-origin allow-scripts"
+></iframe>`
+
+const createEmbedCode = (config: UrlConfig, type:string): string => {
     const query = encodeUrlConfig(config)
     const url = `${BASE_URL}/embed?config=${query}`
-    return HTML_TEMPLATE.replace("%URL%", url)
+    if (type == "jsx") {
+        return JSX_TEMPLATE.replace("%URL%", url)
+    } else {
+        return HTML_TEMPLATE.replace("%URL%", url)
+    }
 }
 
 const HomePage = () => {
     const toast = useToast()
     const [config, setConfig] = useState<UrlConfig>(urlConfigSchema.getDefault())
     const debouncedConfig = useDebounce(config, 750)
-    const htmlCode = useMemo(() => createEmbedCode(debouncedConfig), [debouncedConfig])
+    const htmlCode = useMemo(() => createEmbedCode(debouncedConfig, "html"), [debouncedConfig])
+    const jsxCode = useMemo(() => createEmbedCode(debouncedConfig, "jsx"), [debouncedConfig])
 
     const { config: parsedConfig, error } = useSearchParamConfig()
     useEffect(() => {
@@ -58,6 +69,10 @@ const HomePage = () => {
                 <Box>
                     <Heading size="xl">HTML Code</Heading>
                     <PrismHighlight code={htmlCode} language="markup" />
+                </Box>
+                <Box>
+                    <Heading size="xl">HTML Code</Heading>
+                    <PrismHighlight code={jsxCode} language="markup" />
                 </Box>
             </Flex>
             <Flex direction="column" gap="3" flex="1 1 0px">
