@@ -132,7 +132,7 @@ const HomePage = () => {
             <Flex direction="column" gap="5" flex="1 1 0px" maxW={{ base: "100%", md: "50%" }}>
                 <Box>
                     <Heading size="xl" style={{display:"inline"}}>JSX Code</Heading><Heading style={{display:"inline"}} size="l"> (Use for learnprompting.org)</Heading>
-                    <PrismHighlight code={jsxCode} language="markup" />
+                    <PrismHighlight code={jsxCode} language="jsx" />
                 </Box>
             </Flex>
         </Flex>
