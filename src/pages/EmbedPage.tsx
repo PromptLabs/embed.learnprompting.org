@@ -29,9 +29,11 @@ const EmbedPage = () => {
                 onAPIKeyInputOpen()
                 return
             }
-
-            const openai = new OpenAIApi(new Configuration({ apiKey }))
+            
+            let config = new Configuration({ apiKey })
             delete config.baseOptions.headers['User-Agent']
+            const openai = new OpenAIApi(config)
+            
 
             const response = await openai.createCompletion({
                 model: config.model,
