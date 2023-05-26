@@ -1,6 +1,6 @@
 # embed.learnprompting.org
 
-This repoistory contains the code that powers [embed.learnprompting.org](http://embed.learnprompting.org).
+This repository contains the code that powers [embed.learnprompting.org](http://embed.learnprompting.org).
 
 ## Getting Started
 

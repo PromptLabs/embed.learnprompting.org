@@ -57,7 +57,7 @@ const EmbedPage = () => {
             toast({
                 status: "error",
                 title: "Failed to generate",
-                description: "Unexpected error. Check console for more information. Make sure that you have a credit card attached to your OpenAI account. This is usually the cause of this problem.",
+                description: "Unexpected error. Check console for more information. Make sure that you have a credit card attached to your OpenAI playground (https://platform.openai.com/playground), not ChatGPT account. This is usually the cause of this problem.",
             })
             setGenerating(false)
         })
