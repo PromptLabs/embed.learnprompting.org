@@ -19,9 +19,18 @@ export const urlConfigSchema = yup.object({
 })
 export type UrlConfig = yup.InferType<typeof urlConfigSchema>
 
-export const decodeUrlConfig = (config: string): UrlConfig =>
-    urlConfigSchema.validateSync(JSON.parse(atob(decodeURIComponent(config))))
-
 export const encodeUrlConfig = (obj: UrlConfig): string => {
-    return encodeURIComponent(btoa(JSON.stringify(obj)))
+    let str = JSON.stringify(obj);
+    let encoder = new TextEncoder();
+    let data = encoder.encode(str);
+    let base64 = btoa(String.fromCharCode.apply(null, data as any));
+    return encodeURIComponent(base64);
+}
+
+export const decodeUrlConfig = (config: string): UrlConfig => {
+    let str = decodeURIComponent(config);
+    let data = Uint8Array.from(atob(str), c => c.charCodeAt(0));
+    let decoder = new TextDecoder();
+    let json = decoder.decode(data);
+    return urlConfigSchema.validateSync(JSON.parse(json));
 }
