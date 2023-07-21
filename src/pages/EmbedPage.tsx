@@ -64,7 +64,7 @@ const EmbedPage = () => {
     }
     useEffect(() => {
         // if the input has just closed & we are still generating,
-        // then that meats they inputted their API key and now we
+        // then that means they inputted their API key and now we
         // need to complete the generation task.
         if (!isAPIKeyInputOpen && generating) {
             handleGenerate()

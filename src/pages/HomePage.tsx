@@ -92,7 +92,7 @@ const HomePage = () => {
                     <Text>Model</Text>
                     <Select>
                         {MODELS.map((model) => (
-                            <option value="model">{model}</option>
+                            <option key={model} value="model">{model}</option>
                         ))}
                     </Select>
                 </Box>
