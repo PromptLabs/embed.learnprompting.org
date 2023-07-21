@@ -35,30 +35,30 @@ const EmbedPage = () => {
             const openai = new OpenAIApi(openaiConfig)
             
 
-            var responseText = "";
+            var responseText: string | undefined = "";
             if (config.model.includes("gpt-4") || config.model.includes("gpt-3.5")) {
-                const response = await openai.createChatCompletion({
-                    model: config.model,
-                    messages: [
-                    { "role": "user", "content": config.prompt }
-                    ],
-                })
-                responseText = response.data?.['choices']?.[0]?.['message']?.['content']
-                if (!responseText) {
-                    throw new Error("no response text available")
-                }
+            const response = await openai.createChatCompletion({
+                model: config.model,
+                messages: [
+                { "role": "user", "content": config.prompt }
+                ],
+            })
+            responseText = response.data?.['choices']?.[0]?.['message']?.['content']
+            if (!responseText) {
+                throw new Error("no response text available")
+            }
             } else {
-                const response = await openai.createCompletion({
-                    model: config.model,
-                    prompt: config.prompt,
-                    max_tokens: config.maxTokens,
-                    temperature: config.temperature,
-                    top_p: config.topP,
-                })
-                responseText = response.data?.choices?.[0]?.text
-                if (!responseText) {
-                    throw new Error("no response text available")
-                }
+            const response = await openai.createCompletion({
+                model: config.model,
+                prompt: config.prompt,
+                max_tokens: config.maxTokens,
+                temperature: config.temperature,
+                top_p: config.topP,
+            })
+            responseText = response.data?.choices?.[0]?.text
+            if (!responseText) {
+                throw new Error("no response text available")
+            }
             }
             setConfig({ ...config, output: responseText })
             setGenerating(false)
