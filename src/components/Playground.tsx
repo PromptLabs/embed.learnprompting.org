@@ -52,7 +52,7 @@ const Playground = ({
                 <Flex direction="row" alignItems="center" justifyContent="center" fontSize="xs" gap="1">
                     {configDisplayElements
                         .map<ReactNode>(({ label, data, icon }) => (
-                            <Tooltip label={label} placement="top" hasArrow>
+                            <Tooltip label={label} key={label} placement="top" hasArrow>
                                 <HStack>
                                     {icon && <Icon as={icon} />}
                                     <span>{data}</span>

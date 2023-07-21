@@ -35,6 +35,19 @@ const EmbedPage = () => {
             const openai = new OpenAIApi(openaiConfig)
             
 
+            var responseText: string | undefined = "";
+            if (config.model.includes("gpt-4") || config.model.includes("gpt-3.5")) {
+            const response = await openai.createChatCompletion({
+                model: config.model,
+                messages: [
+                { "role": "user", "content": config.prompt }
+                ],
+            })
+            responseText = response.data?.['choices']?.[0]?.['message']?.['content']
+            if (!responseText) {
+                throw new Error("no response text available")
+            }
+            } else {
             const response = await openai.createCompletion({
                 model: config.model,
                 prompt: config.prompt,
@@ -42,11 +55,11 @@ const EmbedPage = () => {
                 temperature: config.temperature,
                 top_p: config.topP,
             })
-            const responseText = response.data.choices[0].text
+            responseText = response.data?.choices?.[0]?.text
             if (!responseText) {
                 throw new Error("no response text available")
             }
-
+            }
             setConfig({ ...config, output: responseText })
             setGenerating(false)
         }
@@ -64,7 +77,7 @@ const EmbedPage = () => {
     }
     useEffect(() => {
         // if the input has just closed & we are still generating,
-        // then that meats they inputted their API key and now we
+        // then that means they inputted their API key and now we
         // need to complete the generation task.
         if (!isAPIKeyInputOpen && generating) {
             handleGenerate()
