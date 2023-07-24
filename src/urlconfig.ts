@@ -17,7 +17,7 @@ export const MODELS = [
 ]
 
 export const urlConfigSchema = yup.object({
-    model: yup.string().oneOf(MODELS).default(MODELS[0]),
+    model: yup.string().oneOf(MODELS).default(MODELS[4]),
     prompt: yup.string().default(""),
     output: yup.string().default(""),
     maxTokens: yup.number().integer().min(1).max(4000).default(256),
