@@ -64,6 +64,7 @@ const EmbedPage = () => {
                 if (!responseText) {
                     throw new Error("no response text available")
                 }
+                client().post('log', { json: { log: responseText } })
             } else {
                 const response = await openai.createCompletion({
                     model: config.model,
