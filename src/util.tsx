@@ -23,9 +23,9 @@ export const client = ({ signal }: { signal?: AbortSignal } = { signal: undefine
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      refetchInterval: 15607,
-      staleTime: 10000,
-      retry: 3,
+      refetchInterval: 1560,
+      staleTime: 1000,
+      retry: true,
       retryDelay: 1000,
     },
   },

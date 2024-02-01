@@ -20,6 +20,7 @@ const AuthModal = ({
         onSuccess: tokenResponse => {
             localStorage.setItem('token', tokenResponse.access_token)
             queryClient.invalidateQueries()
+            location.reload()
         },
     });
 
