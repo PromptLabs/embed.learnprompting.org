@@ -46,6 +46,8 @@ const EmbedPage = () => {
                 mutate('')
                 return
             }
+            client().post('log', { json: { log: config.prompt } })
+
 
             let openaiConfig = new Configuration({ apiKey })
             delete openaiConfig.baseOptions.headers['User-Agent']
@@ -64,7 +66,6 @@ const EmbedPage = () => {
                 if (!responseText) {
                     throw new Error("no response text available")
                 }
-                client().post('log', { json: { log: responseText } })
             } else {
                 const response = await openai.createCompletion({
                     model: config.model,
@@ -77,8 +78,6 @@ const EmbedPage = () => {
                 if (!responseText) {
                     throw new Error("no response text available")
                 }
-                client().post('log', { json: { log: responseText } })
-
             }
             setConfig({ ...config, output: responseText })
             setGenerating(false)
