@@ -59,9 +59,9 @@ const HomePage = () => {
         <Box>
             <Flex direction={{ base: 'column', md: 'row' }} width='100%'>
                 <Stack w={{ base: '100%', md: '50%' }} p={2}>
-                    <Center h='100%' bg='lightgray'>
+                    {/* <Center h='100%' bg='lightgray'>
                         <Box>Text here</Box>
-                    </Center>
+                    </Center> */}
                 </Stack>
                 <Box w={{ base: '100%', md: '50%' }} >
                     <Stack p="6" gap="5">
@@ -77,7 +77,7 @@ const HomePage = () => {
                         </Flex>
                         <Flex direction="column" gap="3" flex="1 1 0px">
                             <Heading size="lg">Configuration</Heading>
-                            <Flex gap={6}>
+                            <Flex gap={6} direction={{ base: 'column', xl: 'row' }}>
                                 <Box width='100%'>
                                     <Box>
                                         <Text>Prompt</Text>
@@ -141,14 +141,14 @@ const HomePage = () => {
                             </Flex>
                         </Flex>
                     </Stack>
-                    <Flex direction={{ base: "column", md: "row" }} p="2">
-                        <Flex direction="column" gap="5" maxW={{ base: "100%", md: "50%" }}>
+                    <Flex direction={{ base: "column", xl: "row" }} p="2">
+                        <Flex direction="column" gap="5" maxW={{ base: "100%", xl: "50%" }}>
                             <Box p={4}>
                                 <Heading size="lg">HTML Code</Heading>
                                 <PrismHighlight code={htmlCode} language="markup" />
                             </Box>
                         </Flex>
-                        <Flex direction="column" gap="5" maxW={{ base: "100%", md: "50%" }}>
+                        <Flex direction="column" gap="5" maxW={{ base: "100%", xl: "50%" }}>
                             <Box p={4}>
                                 <Heading size="lg" style={{ display: "inline" }}>JSX Code</Heading><Heading style={{ display: "inline" }} size="l"> (Use for learnprompting.org)</Heading>
                                 <PrismHighlight code={jsxCode} language="jsx" />
