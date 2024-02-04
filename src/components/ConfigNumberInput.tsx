@@ -25,14 +25,14 @@ const ConfigNumberInput: FC<{
     return (
         <Box>
             <Text>{name}</Text>
-            <HStack>
+            <HStack gap={5}>
                 <Slider onChange={(value) => onChange(value)} value={value} min={min} max={max} step={step}>
-                    <SliderTrack>
-                        <SliderFilledTrack />
+                    <SliderTrack h='6px'>
+                        <SliderFilledTrack background='#685DF8' borderRadius={8}/>
                     </SliderTrack>
-                    <SliderThumb />
+                    <SliderThumb background='#4329F5' borderRadius={4} />
                 </Slider>
-                <NumberInput onChange={(_, value) => onChange(value)} value={value} min={min} max={max} step={step}>
+                <NumberInput onChange={(_, value) => onChange(value)} value={value} min={min} max={max} step={step} variant='filled' size='sm' w={120}>
                     <NumberInputField />
                     <NumberInputStepper>
                         <NumberIncrementStepper />
