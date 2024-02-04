@@ -2,7 +2,7 @@ import { Flex, Link, Spacer } from "@chakra-ui/react"
 
 const Footer = ({ editUrl }: { editUrl: string }) => {
     return (
-        <Flex p="sm" textDecoration="underline" backgroundColor="#212432" padding="8px 16px" fontSize="sm" color='#5F6372'>
+        <Flex p="sm" textDecoration="underline" backgroundColor="gray.700" padding="2" fontSize="sm">
             <Link href="https://learnprompting.org" isExternal>
                 learnprompting.org
             </Link>

@@ -4,9 +4,7 @@ import theme from "prism-react-renderer/themes/nightOwl"
 
 const PrismHighlight = ({ code, language }: { code: string; language: Language }) => {
     return (
-        <Highlight {...defaultProps} theme={{...theme, plain: {
-            backgroundColor: '#041624'
-        }}} code={code} language={language}>
+        <Highlight {...defaultProps} theme={theme} code={code} language={language}>
             {({ className, style, tokens, getLineProps, getTokenProps }) => (
                 <Text
                     p="3"

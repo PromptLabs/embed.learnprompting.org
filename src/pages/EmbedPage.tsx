@@ -3,81 +3,62 @@ import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
 import { encodeUrlConfig, UrlConfig, urlConfigSchema } from "../urlconfig"
 import { Flex, Alert, AlertDescription, AlertIcon, AlertTitle, useToast, useDisclosure } from "@chakra-ui/react"
+import { useLocalStorage } from "usehooks-ts"
 import { verifyApiKey } from "../openai"
 import { Configuration, OpenAIApi } from "openai"
-import AuthModal from "../components/AuthModal"
+import ApiKeyInputModal from "../components/ApiKeyInputModal"
 import Footer from "../components/Footer"
 import Playground from "../components/Playground"
-import ApiKeyInputModal from '../components/ApiKeyInputModal'
-import { queryClient, useEditApiKey, useIsLoggedIn, useApiKey, client } from '../util'
-import { useEffectOnce } from 'usehooks-ts'
-
-
 
 const EmbedPage = () => {
     const toast = useToast()
+    const [apiKey, setApiKey] = useLocalStorage<string | null>("openai_api_key", null)
     const { config: initialConfig, error } = useSearchParamConfig()
     const [config, setConfig] = useState<UrlConfig>(initialConfig ?? urlConfigSchema.getDefault())
     const [generating, setGenerating] = useState(false)
-
-    const apiKey = useApiKey()
-    const isLoggedIn = useIsLoggedIn()
-    const { mutate } = useEditApiKey()
-
-
-    const setApiKey = async () => {
-        const res = await client().get('apiKey')
-        const apiKey = await res.text()
-        if (await verifyApiKey(apiKey)) {
-            mutate(apiKey)
-            queryClient.invalidateQueries({ queryKey: ['apiKey'] })
-        }
-    }
-
-    useEffectOnce(() => {
-        setApiKey()
-    })
+    const { isOpen: isAPIKeyInputOpen, onOpen: onAPIKeyInputOpen, onClose: onAPIKeyInputClose } = useDisclosure()
 
     // generate the openai completion and place it into the configuration.
     // handles if the api key is invalid and opens the modal.
     const handleGenerate = () => {
         const actionAsync = async () => {
             if (apiKey == null || !(await verifyApiKey(apiKey))) {
-                mutate('')
+                // if their api key is invalid, open the dialogue to fix
+                // it up but leave generating status to true so generation
+                // will complete afterwards
+                onAPIKeyInputOpen()
                 return
             }
-            client().post('log', { json: { log: config.prompt } })
-
-
+            
             let openaiConfig = new Configuration({ apiKey })
             delete openaiConfig.baseOptions.headers['User-Agent']
             const openai = new OpenAIApi(openaiConfig)
-
+            
 
             var responseText: string | undefined = "";
             if (config.model.includes("gpt-4") || config.model.includes("gpt-3.5")) {
-                const response = await openai.createChatCompletion({
-                    model: config.model,
-                    messages: [
-                        { "role": "user", "content": config.prompt }
-                    ],
-                })
-                responseText = response.data?.['choices']?.[0]?.['message']?.['content']
-                if (!responseText) {
-                    throw new Error("no response text available")
-                }
+            const response = await openai.createChatCompletion({
+                model: config.model,
+                messages: [
+                { "role": "user", "content": config.prompt }
+                ],
+            })
+            responseText = response.data?.['choices']?.[0]?.['message']?.['content']
+            if (!responseText) {
+                throw new Error("no response text available")
+            }
             } else {
-                const response = await openai.createCompletion({
-                    model: config.model,
-                    prompt: config.prompt,
-                    max_tokens: config.maxTokens,
-                    temperature: config.temperature,
-                    top_p: config.topP,
-                })
-                responseText = response.data?.choices?.[0]?.text
-                if (!responseText) {
-                    throw new Error("no response text available")
-                }
+            const response = await openai.createCompletion({
+                model: config.model,
+                prompt: config.prompt,
+                max_tokens: config.maxTokens,
+                temperature: config.temperature,
+                top_p: config.topP,
+            })
+            responseText = response.data?.choices?.[0]?.text
+            if (!responseText) {
+                throw new Error("no response text available")
+            }
             }
             setConfig({ ...config, output: responseText })
             setGenerating(false)
@@ -85,8 +66,6 @@ const EmbedPage = () => {
 
         setGenerating(true)
         actionAsync().catch((err) => {
-            // mutate('') Maybe provide option for user to reset their key?
-            queryClient.invalidateQueries({ queryKey: ['apiKey'] })
             console.error("Unexpected generation error", err)
             toast({
                 status: "error",
@@ -100,10 +79,10 @@ const EmbedPage = () => {
         // if the input has just closed & we are still generating,
         // then that means they inputted their API key and now we
         // need to complete the generation task.
-        if (apiKey && isLoggedIn && generating) {
+        if (!isAPIKeyInputOpen && generating) {
             handleGenerate()
         }
-    }, [apiKey, isLoggedIn])
+    }, [isAPIKeyInputOpen])
 
     if (!initialConfig) {
         return (
@@ -138,18 +117,11 @@ const EmbedPage = () => {
                 <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
             </Flex>
             <ApiKeyInputModal
-                isOpen={!apiKey && isLoggedIn && generating}
+                isOpen={isAPIKeyInputOpen}
+                onClose={onAPIKeyInputClose}
                 onComplete={(newKey) => {
-                    mutate(newKey)
-                }}
-                onClose={console.log}
-            />
-            <AuthModal
-                isOpen={!isLoggedIn && generating}
-                onClose={console.log}
-                onComplete={(token) => {
-                    localStorage.setItem('token', token)
-                    queryClient.invalidateQueries()
+                    setApiKey(newKey)
+                    onAPIKeyInputClose()
                 }}
             />
         </>
