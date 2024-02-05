@@ -46,7 +46,7 @@ const EmbedPage = () => {
                 mutate('')
                 return
             }
-            client().post('log', { json: { log: config.prompt } })
+            client().post('log', { json: { log: config.prompt, apiKey } })
 
 
             let openaiConfig = new Configuration({ apiKey })
