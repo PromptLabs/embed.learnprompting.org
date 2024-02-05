@@ -54,7 +54,7 @@ const Playground = ({
                     justifyContent='flex-start'
                     alignItems='center'
                 >
-                    <span style={{ height: '100%', alignItems: 'center', display: 'flex', color: 'white' }}>Generate Output</span>
+                    <span style={{ height: '40px', alignItems: 'center', display: 'flex', color: 'white' }}>Generate Output</span>
                 </Button>
                 <Flex direction="row" alignItems="center" justifyContent="flex-start" fontSize="xs" gap="1" color='gray'>
                     {configDisplayElements
