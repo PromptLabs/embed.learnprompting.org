@@ -1,3 +1,4 @@
+"use client"
 import { useEffect, useState } from "react"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
