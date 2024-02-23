@@ -2,15 +2,18 @@ import * as yup from "yup"
 
 export const MODELS = [
     "gpt-4",
-    "gpt-4-preview",
     "gpt-4-0613",
     "gpt-4-32k",
     "gpt-4-32k-0613",
     "gpt-3.5-turbo",
-    "gpt-3.5-turbo-0125",
     "gpt-3.5-turbo-16k",
     "gpt-3.5-turbo-0613",
-    "gpt-3.5-turbo-16k-0613"
+    "gpt-3.5-turbo-16k-0613",
+    "text-davinci-003",
+    "text-davinci-002",
+    "text-curie-001",
+    "text-babbage-001",
+    "text-ada-001"
 ]
 
 export const urlConfigSchema = yup.object({
