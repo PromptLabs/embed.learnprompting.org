@@ -75,8 +75,16 @@ const HomePage = () => {
                     <Heading size="lg">Usage</Heading>
                     <Box>
                         <Text>
-                            The Learn Prompting Embeds allow you to integrate interactive AI prompt generators directly
-                            into your website. To start configure the embed by editing the default parameters:
+                            The{" "}
+                            <Link
+                                to="https://learnprompting.org"
+                                target="_blank"
+                                style={{ fontWeight: "bold", color: "#685DF8" }}
+                            >
+                                Learn Prompting
+                            </Link>{" "}
+                            Embed allows you to interactively write and test prompts directly in your website. To start,
+                            configure the embed by editing the default parameters:
                         </Text>
                         <br />
                         <UnorderedList>
@@ -106,7 +114,7 @@ const HomePage = () => {
                                     Model:
                                 </Link>{" "}
                                 The underlying structure and trained parameters of the LLM that determine how it
-                                processes inputs and generates outputs.
+                                processes inputs and generates outputs, with specified context lengths
                             </ListItem>
                             <ListItem>
                                 <Link
@@ -146,12 +154,12 @@ const HomePage = () => {
                         <Text>
                             These options can be found on the right side under the Preview embed. Once you have
                             customized the settings to your liking, your configuration will be encoded into an iframe
-                            code snippet, in either HTML or JSX.
+                            code snippet, in both HTML and JSX.
                             <br />
                             <br />
                             Copy this iframe and paste it into the source code of your website where you want the embed
                             to appear. This will enable your site visitors to interact with the AI prompts and generate
-                            their own outputs.
+                            their own outputs, based on the parameters you configured.
                         </Text>
                     </Box>
                     <br />
@@ -163,10 +171,10 @@ const HomePage = () => {
                         </Text>
                         <br />
                         <Text>
-                            Whitelisted users, or those with an active Learn Prompting Plus membership, enjoy a
-                            streamlined experience as they do not need to enter an API key. Their membership status is
-                            automatically recognized when logging in with their associated email, allowing them to focus
-                            on creating and testing prompts without any additional setup.
+                            Whitelisted users (those with an active Learn Prompting Plus membership) enjoy a streamlined
+                            experience as they do not need to enter an API key. Their membership status is automatically
+                            recognized when logging in with their associated email, allowing them to focus on creating
+                            and testing prompts without any additional setup.
                         </Text>
                         <br />
                         <Text>
@@ -185,7 +193,7 @@ const HomePage = () => {
                         </Text>
                         <br />
                         <Text>
-                            This initial login step ensures that the user's OpenAI API key is securely stored and
+                            This initial setup step ensures that the user's OpenAI API key is securely stored and
                             automatically applied in future sessions, eliminating the need to re-enter the key each
                             time. After a successful login, a cookie will be stored in the user's browser. While the
                             cookie is still valid, users will automatically be authenticated. When the cookie expires,
