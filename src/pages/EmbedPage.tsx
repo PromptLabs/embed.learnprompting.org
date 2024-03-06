@@ -26,7 +26,7 @@ const EmbedPage = () => {
     const { mutate } = useEditApiKey()
 
     const checkWhitelisted = async () => {
-        const res = await client().get("whitelisted")
+        const res = await client().get('whitelisted')
         const { whitelisted } : {whitelisted : boolean} = await res.json()
         console.log("whitelisted:", whitelisted)
         setWhitelisted(whitelisted)
@@ -42,7 +42,6 @@ const EmbedPage = () => {
     }
 
     useEffectOnce(() => {
-        checkWhitelisted()
         setApiKey()
     })
 
@@ -106,6 +105,11 @@ const EmbedPage = () => {
         })
     
     }
+
+    useEffect(() => {
+        checkWhitelisted()
+    }, [])
+    
     useEffect(() => {
         // if the input has just closed & we are still generating,
         // then that means they inputted their API key and now we
