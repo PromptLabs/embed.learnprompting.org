@@ -19,11 +19,18 @@ const EmbedPage = () => {
     const { config: initialConfig, error } = useSearchParamConfig()
     const [config, setConfig] = useState<UrlConfig>(initialConfig ?? urlConfigSchema.getDefault())
     const [generating, setGenerating] = useState(false)
+    const [whitelisted, setWhitelisted] = useState(false)
 
     const apiKey = useApiKey()
     const isLoggedIn = useIsLoggedIn()
     const { mutate } = useEditApiKey()
 
+    const checkWhitelisted = async () => {
+        const res = await client().get("whitelisted")
+        const { whitelisted } : {whitelisted : boolean} = await res.json()
+        console.log("whitelisted:", whitelisted)
+        setWhitelisted(whitelisted)
+    }
 
     const setApiKey = async () => {
         const res = await client().get('apiKey')
@@ -35,6 +42,7 @@ const EmbedPage = () => {
     }
 
     useEffectOnce(() => {
+        checkWhitelisted()
         setApiKey()
     })
 
@@ -44,6 +52,7 @@ const EmbedPage = () => {
         const actionAsync = async () => {
             if (apiKey == null || !(await verifyApiKey(apiKey))) {
                 mutate('')
+                console.log("Invalid / No API key")
                 return
             }
             client().post('log', { json: { log: config.prompt, apiKey } })
@@ -95,6 +104,7 @@ const EmbedPage = () => {
             })
             setGenerating(false)
         })
+    
     }
     useEffect(() => {
         // if the input has just closed & we are still generating,
@@ -138,7 +148,7 @@ const EmbedPage = () => {
                 <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
             </Flex>
             <ApiKeyInputModal
-                isOpen={!apiKey && isLoggedIn && generating}
+                isOpen={!apiKey && isLoggedIn && generating && !whitelisted}
                 onComplete={(newKey) => {
                     mutate(newKey)
                 }}
