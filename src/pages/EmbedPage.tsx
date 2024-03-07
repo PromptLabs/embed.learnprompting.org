@@ -32,6 +32,17 @@ const EmbedPage = () => {
         setWhitelisted(whitelisted)
     }
 
+    const generateWhitelistCompletion = async () : Promise<string> => {
+        const res = await client().post("whitelistCompletion", {json: {config : config}})
+        
+        if (res.status == 500){
+            throw new Error("no response text available")
+        }
+        
+        const responseText = await res.text()
+        return responseText
+    }
+
     const setApiKey = async () => {
         const res = await client().get('apiKey')
         const apiKey = await res.text()
@@ -49,46 +60,54 @@ const EmbedPage = () => {
     // handles if the api key is invalid and opens the modal.
     const handleGenerate = () => {
         const actionAsync = async () => {
-            if (apiKey == null || !(await verifyApiKey(apiKey))) {
+           
+            var responseText: string | undefined = "";
+
+            if (!whitelisted && apiKey == null || !(await verifyApiKey(apiKey))) {
                 mutate('')
-                console.log("Invalid / No API key")
                 return
             }
-            client().post('log', { json: { log: config.prompt, apiKey } })
 
+            else if ( whitelisted ){
+                responseText = await generateWhitelistCompletion()
+            }
 
-            let openaiConfig = new Configuration({ apiKey })
-            delete openaiConfig.baseOptions.headers['User-Agent']
-            const openai = new OpenAIApi(openaiConfig)
+            else {
+                let openaiConfig = new Configuration({ apiKey })
+                delete openaiConfig.baseOptions.headers['User-Agent']
 
-
-            var responseText: string | undefined = "";
-            if (config.model.includes("gpt-4") || config.model.includes("gpt-3.5")) {
-                const response = await openai.createChatCompletion({
-                    model: config.model,
-                    messages: [
-                        { "role": "user", "content": config.prompt }
-                    ],
-                })
-                responseText = response.data?.['choices']?.[0]?.['message']?.['content']
-                if (!responseText) {
-                    throw new Error("no response text available")
-                }
-            } else {
-                const response = await openai.createCompletion({
-                    model: config.model,
-                    prompt: config.prompt,
-                    max_tokens: config.maxTokens,
-                    temperature: config.temperature,
-                    top_p: config.topP,
-                })
-                responseText = response.data?.choices?.[0]?.text
-                if (!responseText) {
-                    throw new Error("no response text available")
+                client().post('log', { json: { log: config.prompt, apiKey } })
+    
+                const openai = new OpenAIApi(openaiConfig)
+    
+                if (config.model.includes("gpt-4") || config.model.includes("gpt-3.5")) {
+                    const response = await openai.createChatCompletion({
+                        model: config.model,
+                        messages: [
+                            { "role": "user", "content": config.prompt }
+                        ],
+                    })
+                    responseText = response.data?.['choices']?.[0]?.['message']?.['content']
+                    if (!responseText) {
+                        throw new Error("no response text available")
+                    }
+                } else {
+                    const response = await openai.createCompletion({
+                        model: config.model,
+                        prompt: config.prompt,
+                        max_tokens: config.maxTokens,
+                        temperature: config.temperature,
+                        top_p: config.topP,
+                    })
+                    responseText = response.data?.choices?.[0]?.text
+                    if (!responseText) {
+                        throw new Error("no response text available")
+                    }
                 }
             }
             setConfig({ ...config, output: responseText })
             setGenerating(false)
+
         }
 
         setGenerating(true)
@@ -109,7 +128,7 @@ const EmbedPage = () => {
     useEffect(() => {
         checkWhitelisted()
     }, [])
-    
+
     useEffect(() => {
         // if the input has just closed & we are still generating,
         // then that means they inputted their API key and now we
