@@ -23,10 +23,14 @@ const Playground = ({
         { label: "Top P", data: config.topP, icon: AiOutlineVerticalAlignTop },
     ]
     return (
-        <Flex direction={{ base: "column", sm: "row" }} p="2" gap="5" minH="0" h="100%">
-            <Flex direction="column" gap="3" flex="1 1 0">
-                <Heading size="md">Prompt</Heading>
+        <Flex direction={{ base: "column", sm: "row" }} p="32px 24px" gap="5" minH="0" h="100%" bg='black'>
+            <Flex direction="column" gap="5" flex="1 1 0" >
+                <Heading size="lg" color='white'>Prompt</Heading>
                 <Textarea
+                    bg='#212432'
+                    color='white'
+                    borderRadius='2'
+                    border='none'
                     placeholder="Write your prompt here"
                     flexBasis="100%"
                     flexShrink="1"
@@ -36,20 +40,23 @@ const Playground = ({
                     onChange={(event) => onUpdatePrompt(event.currentTarget.value)}
                     readOnly={generating}
                 />
-                <LightMode>
-                    <Button
-                        size="lg"
-                        leftIcon={<BsFillPlayFill size="2rem" />}
-                        onClick={onGenerate}
-                        disabled={config == null}
-                        colorScheme="red"
-                        isLoading={generating}
-                        isDisabled={generating || config.prompt.length == 0}
-                    >
-                        Generate
-                    </Button>
-                </LightMode>
-                <Flex direction="row" alignItems="center" justifyContent="center" fontSize="xs" gap="1">
+                <Button
+                    height='64px'
+                    borderRadius='2'
+                    leftIcon={<BsFillPlayFill size="18px" />}
+                    onClick={onGenerate}
+                    disabled={config == null}
+                    background='#00FFBF'
+                    colorScheme="#00FFBF"
+                    isLoading={generating}
+                    isDisabled={generating || config.prompt.length == 0}
+                    fontSize='16px'
+                    justifyContent='flex-start'
+                    alignItems='center'
+                >
+                    <span style={{ height: '40px', alignItems: 'center', display: 'flex', color: 'white' }}>Generate Output</span>
+                </Button>
+                <Flex direction="row" alignItems="center" justifyContent="flex-start" fontSize="xs" gap="1" color='gray'>
                     {configDisplayElements
                         .map<ReactNode>(({ label, data, icon }) => (
                             <Tooltip label={label} key={label} placement="top" hasArrow>
@@ -63,16 +70,16 @@ const Playground = ({
                 </Flex>
             </Flex>
             <Flex direction="column" gap="3" flex="1 1 0" overflow="auto">
-                <Heading size="md">Output</Heading>
-                <Mark
-                    backgroundColor="green.100"
+                <Heading size="lg" color='white'>Output</Heading>
+                {config.output ? <Mark
+                    backgroundColor="#9CFFE6"
                     overflowWrap="break-word"
                     whiteSpace="pre-wrap"
                     boxDecorationBreak="clone"
-                    padding="1"
+                    padding="3"
                 >
                     {config.output}
-                </Mark>
+                </Mark> : <></>}
             </Flex>
         </Flex>
     )

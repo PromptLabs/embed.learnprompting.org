@@ -62,7 +62,7 @@ const ApiKeyInputModal = ({
                         {failedVerify ? (
                             <FormErrorMessage>Invalid API key</FormErrorMessage>
                         ) : (
-                            <FormHelperText>We'll store this in Local Storage</FormHelperText>
+                            <FormHelperText>We'll store this securely in the cloud</FormHelperText>
                         )}
                     </FormControl>
                 </ModalBody>
