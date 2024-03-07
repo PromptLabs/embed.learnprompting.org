@@ -63,13 +63,14 @@ const EmbedPage = () => {
            
             var responseText: string | undefined = "";
 
-            if (!whitelisted && apiKey == null || !(await verifyApiKey(apiKey))) {
-                mutate('')
-                return
+            if ( whitelisted ){
+                console.log("generating whitelist completion")
+                responseText = await generateWhitelistCompletion()
             }
 
-            else if ( whitelisted ){
-                responseText = await generateWhitelistCompletion()
+            else if (apiKey == null || !(await verifyApiKey(apiKey))) {
+                mutate('')
+                return
             }
 
             else {
