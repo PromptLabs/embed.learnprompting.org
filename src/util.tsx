@@ -56,6 +56,7 @@ export const useCheckWhitelist = () =>
 
             return whitelisted
         },
+        staleTime: 60,
     }).data!
 
 export const useApiKey = () =>

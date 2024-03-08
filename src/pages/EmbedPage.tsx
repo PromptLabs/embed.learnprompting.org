@@ -29,6 +29,8 @@ const EmbedPage = () => {
 
         if (res.status == 500) {
             throw new Error("no response text available")
+        } else if (res.status === 401) {
+            throw new Error(`Provided Whitelist Email is invalid => ${localStorage.getItem("whitelisted_email")}`)
         }
 
         const responseText = await res.text()
