@@ -11,6 +11,7 @@ import {
     Text,
     InputRightElement,
     InputGroup,
+    Center,
 } from "@chakra-ui/react"
 import { useGoogleLogin } from "@react-oauth/google"
 import { queryClient, useCheckWhitelist } from "../util"
@@ -35,7 +36,6 @@ const AuthModal = ({
 
         if (whitelisted) {
             localStorage.setItem("whitelisted_email", email)
-            queryClient.invalidateQueries()
             location.reload()
         }
     }
@@ -47,7 +47,7 @@ const AuthModal = ({
                 <ModalHeader>Please log in</ModalHeader>
                 <ModalBody>
                     <Button onClick={() => login()}>Log in with Google</Button>
-                    or
+                    <Center> or </Center>
                     <Text>Enter your Learn Prompting Plus email</Text>
                     <InputGroup size="sm">
                         <Input placeholder="example@mail.com" type="email" ref={emailInput} />
