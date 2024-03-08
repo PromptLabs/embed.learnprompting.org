@@ -64,8 +64,9 @@ const AuthModal = ({
                     <Stack>
                         <Flex direction={"column"} align={"center"}>
                             <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
-                            <InputGroup size="sm" w={"60%"} mt={2} borderRadius={"md"}>
+                            <InputGroup size="sm" w={"60%"} mt={2}>
                                 <Input
+                                    borderRadius={"md"}
                                     placeholder="example@mail.com"
                                     type="email"
                                     ref={emailInput}
