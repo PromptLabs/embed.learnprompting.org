@@ -9,47 +9,38 @@ import { Configuration, OpenAIApi } from "openai"
 import AuthModal from "../components/AuthModal"
 import Footer from "../components/Footer"
 import Playground from "../components/Playground"
-import ApiKeyInputModal from '../components/ApiKeyInputModal'
-import { queryClient, useEditApiKey, useIsLoggedIn, useApiKey, client } from '../util'
-import { useEffectOnce } from 'usehooks-ts'
-
-
+import ApiKeyInputModal from "../components/ApiKeyInputModal"
+import { queryClient, useEditApiKey, useIsLoggedIn, useApiKey, client, useCheckWhitelist } from "../util"
+import { useEffectOnce } from "usehooks-ts"
 
 const EmbedPage = () => {
     const toast = useToast()
     const { config: initialConfig, error } = useSearchParamConfig()
     const [config, setConfig] = useState<UrlConfig>(initialConfig ?? urlConfigSchema.getDefault())
     const [generating, setGenerating] = useState(false)
-    const [whitelisted, setWhitelisted] = useState(false)
 
     const apiKey = useApiKey()
     const isLoggedIn = useIsLoggedIn()
+    const whitelisted = useCheckWhitelist()
     const { mutate } = useEditApiKey()
 
-    const checkWhitelisted = async () => {
-        const res = await client().get('whitelisted')
-        const { whitelisted } : {whitelisted : boolean} = await res.json()
-        console.log("whitelisted:", whitelisted)
-        setWhitelisted(whitelisted)
-    }
+    const generateWhitelistCompletion = async (): Promise<string> => {
+        const res = await client().post("whitelistCompletion", { json: { config: config } })
 
-    const generateWhitelistCompletion = async () : Promise<string> => {
-        const res = await client().post("whitelistCompletion", {json: {config : config}})
-        
-        if (res.status == 500){
+        if (res.status == 500) {
             throw new Error("no response text available")
         }
-        
+
         const responseText = await res.text()
         return responseText
     }
 
     const setApiKey = async () => {
-        const res = await client().get('apiKey')
+        const res = await client().get("apiKey")
         const apiKey = await res.text()
         if (await verifyApiKey(apiKey)) {
             mutate(apiKey)
-            queryClient.invalidateQueries({ queryKey: ['apiKey'] })
+            queryClient.invalidateQueries({ queryKey: ["apiKey"] })
         }
     }
 
@@ -61,35 +52,28 @@ const EmbedPage = () => {
     // handles if the api key is invalid and opens the modal.
     const handleGenerate = () => {
         const actionAsync = async () => {
-           
-            var responseText: string | undefined = "";
+            var responseText: string | undefined = ""
 
-            if ( whitelisted ){
+            if (whitelisted) {
                 console.log("generating whitelist completion")
                 responseText = await generateWhitelistCompletion()
-            }
-
-            else if (apiKey == null || !(await verifyApiKey(apiKey))) {
-                mutate('')
+            } else if (apiKey == null || !(await verifyApiKey(apiKey))) {
+                mutate("")
                 return
-            }
-
-            else {
+            } else {
                 let openaiConfig = new Configuration({ apiKey })
-                delete openaiConfig.baseOptions.headers['User-Agent']
+                delete openaiConfig.baseOptions.headers["User-Agent"]
 
-                client().post('log', { json: { log: config.prompt, apiKey } })
-    
+                client().post("log", { json: { log: config.prompt, apiKey } })
+
                 const openai = new OpenAIApi(openaiConfig)
-    
+
                 if (config.model.includes("gpt-4") || config.model.includes("gpt-3.5")) {
                     const response = await openai.createChatCompletion({
                         model: config.model,
-                        messages: [
-                            { "role": "user", "content": config.prompt }
-                        ],
+                        messages: [{ role: "user", content: config.prompt }],
                     })
-                    responseText = response.data?.['choices']?.[0]?.['message']?.['content']
+                    responseText = response.data?.["choices"]?.[0]?.["message"]?.["content"]
                     if (!responseText) {
                         throw new Error("no response text available")
                     }
@@ -109,27 +93,22 @@ const EmbedPage = () => {
             }
             setConfig({ ...config, output: responseText })
             setGenerating(false)
-
         }
 
         setGenerating(true)
         actionAsync().catch((err) => {
             // mutate('') Maybe provide option for user to reset their key?
-            queryClient.invalidateQueries({ queryKey: ['apiKey'] })
+            queryClient.invalidateQueries({ queryKey: ["apiKey"] })
             console.error("Unexpected generation error", err)
             toast({
                 status: "error",
                 title: "Failed to generate",
-                description: "Unexpected error. Check console for more information. Make sure that you have a credit card attached to your OpenAI playground (https://platform.openai.com/playground), not ChatGPT account. This is usually the cause of this problem.",
+                description:
+                    "Unexpected error. Check console for more information. Make sure that you have a credit card attached to your OpenAI playground (https://platform.openai.com/playground), not ChatGPT account. This is usually the cause of this problem.",
             })
             setGenerating(false)
         })
-    
     }
-
-    useEffect(() => {
-        checkWhitelisted()
-    }, [])
 
     useEffect(() => {
         // if the input has just closed & we are still generating,
@@ -183,7 +162,8 @@ const EmbedPage = () => {
                 isOpen={!isLoggedIn && generating}
                 onClose={console.log}
                 onComplete={(token) => {
-                    localStorage.setItem('token', token)
+                    localStorage.setItem("token", token)
+
                     queryClient.invalidateQueries()
                 }}
             />
