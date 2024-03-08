@@ -8,7 +8,7 @@ export const client = ({ signal }: { signal?: AbortSignal } = { signal: undefine
         prefixUrl: import.meta.env.VITE_SERVER_HOST,
         headers: {
             authorization: `Bearer ${typeof window === "object" && localStorage.getItem("token")}`,
-            "X-Whitelisted-Email": (typeof window === "object" && localStorage.getItem("whitelisted_email")) || "",
+            "X-Whitelisted-Email": `${typeof window === "object" && localStorage.getItem("whitelisted_email")}`,
         },
         signal,
         throwHttpErrors: true,
