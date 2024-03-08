@@ -14,6 +14,8 @@ import {
     Center,
     useToast,
     Heading,
+    Stack,
+    Flex,
 } from "@chakra-ui/react"
 import { useGoogleLogin } from "@react-oauth/google"
 import { queryClient, client } from "../util"
@@ -59,26 +61,28 @@ const AuthModal = ({
             <ModalContent>
                 <ModalHeader>Please log in</ModalHeader>
                 <ModalBody>
-                    <Center>
-                        <Button onClick={() => login()}>Log in with Google</Button>
-                        <Heading size="sm"> or </Heading>
-                        <br />
-                        <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
-                        <InputGroup size="sm" w={"60%"}>
-                            <Input
-                                placeholder="example@mail.com"
-                                type="email"
-                                ref={emailInput}
-                                variant="filled"
-                                p={2}
-                            />
-                            <InputRightElement width="4.5rem" p={2}>
-                                <Button h="1.75rem" size="sm" onClick={async () => await checkWhitelisted()}>
-                                    Submit
-                                </Button>
-                            </InputRightElement>
-                        </InputGroup>
-                    </Center>
+                    <Stack>
+                        <Flex direction={"column"} align={"center"}>
+                            <Button onClick={() => login()}>Log in with Google</Button>
+                            <Heading size="sm"> or </Heading>
+                            <br />
+                            <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
+                            <InputGroup size="sm" w={"60%"}>
+                                <Input
+                                    placeholder="example@mail.com"
+                                    type="email"
+                                    ref={emailInput}
+                                    variant="filled"
+                                    p={2}
+                                />
+                                <InputRightElement width="4.5rem" p={2}>
+                                    <Button h="1.75rem" size="sm" onClick={async () => await checkWhitelisted()}>
+                                        Submit
+                                    </Button>
+                                </InputRightElement>
+                            </InputGroup>
+                        </Flex>
+                    </Stack>
                 </ModalBody>
                 <ModalFooter />
             </ModalContent>
