@@ -49,12 +49,8 @@ export const useCheckWhitelist = () =>
     useSuspenseQuery({
         queryKey: ["checkWhitelisted"],
         queryFn: async () => {
-            const emailToCheck = localStorage.getItem("whitelisted_email") || ""
-            const { whitelisted }: { whitelisted: boolean } = await client()
-                .post("whitelisted", { json: { email: emailToCheck } })
-                .json()
-
-            return whitelisted
+            const whitelisted = localStorage.getItem("whitelisted_email")
+            return !!whitelisted
         },
         staleTime: 60,
     }).data!
