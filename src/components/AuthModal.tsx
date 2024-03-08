@@ -10,6 +10,7 @@ import {
     Input,
     Text,
     InputRightElement,
+    InputGroup,
 } from "@chakra-ui/react"
 import { useGoogleLogin } from "@react-oauth/google"
 import { queryClient, useCheckWhitelist } from "../util"
@@ -48,7 +49,8 @@ const AuthModal = ({
                     <Button onClick={() => login()}>Log in with Google</Button>
                     or
                     <Text>Enter your Learn Prompting Plus email</Text>
-                    <Input placeholder="example@mail.com" type="email" ref={emailInput}>
+                    <InputGroup size="sm">
+                        <Input placeholder="example@mail.com" type="email" ref={emailInput} />
                         <InputRightElement width="4.5rem">
                             <Button
                                 h="1.75rem"
@@ -58,7 +60,7 @@ const AuthModal = ({
                                 Submit
                             </Button>
                         </InputRightElement>
-                    </Input>
+                    </InputGroup>
                 </ModalBody>
                 <ModalFooter />
             </ModalContent>
