@@ -3,6 +3,13 @@ import ky from "ky"
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister"
 import { persistQueryClient, removeOldestQuery } from "@tanstack/react-query-persist-client"
 
+// Necessary to make sure everyone gets new updates without having to manually clear their localstorage
+// Need to increment version on each update to push to new users
+if (localStorage.getItem("version") !== "0.0.1") {
+    localStorage.clear()
+    localStorage.setItem("version", "0.0.1")
+}
+
 export const client = ({ signal }: { signal?: AbortSignal } = { signal: undefined }) =>
     ky.extend({
         prefixUrl: import.meta.env.VITE_SERVER_HOST,
