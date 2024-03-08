@@ -166,22 +166,22 @@ const HomePage = () => {
                     <Heading size="lg">Workflow</Heading>
                     <Box>
                         <Text>
-                            When generating ouput for the first time, users will be prompted to sign in with their
-                            Google account.
+                            When generating ouput for the first time, users will be prompted to enter their email
+                            associated with their Learn Prompting Plus (LP Plus) account. If a user is not a LP Plus
+                            member, they can also sign in with their Google account.
                         </Text>
                         <br />
                         <Text>
-                            Whitelisted users (those with an active Learn Prompting Plus membership) enjoy a streamlined
-                            experience as they do not need to enter an API key. Their membership status is automatically
-                            recognized when logging in with their associated email, allowing them to focus on creating
-                            and testing prompts without any additional setup.
+                            Whitelisted users (those with an active LP Plus membership) enjoy a streamlined experience
+                            as they do not need to enter an API key. Their membership status is automatically recognized
+                            when logging in with their associated email, allowing them to focus on creating and testing
+                            prompts without any additional setup.
                         </Text>
                         <br />
                         <Text>
-                            For users who are not Learn Prompting Plus members, an additional step is required. After
-                            signing in with Google, they will be prompted to enter their OpenAI API key. This key is
-                            necessary for the embed to communicate with the user's OpenAI account and can be found in
-                            the user's{" "}
+                            For users who are not LP Plus members, an additional step is required. After signing in with
+                            Google, they will be prompted to enter their OpenAI API key. This key is necessary for the
+                            embed to communicate with the user's OpenAI account and can be found in the user's{" "}
                             <Link
                                 to="https://platform.openai.com/api-keys"
                                 target="_blank"
@@ -195,9 +195,10 @@ const HomePage = () => {
                         <Text>
                             This initial setup step ensures that the user's OpenAI API key is securely stored and
                             automatically applied in future sessions, eliminating the need to re-enter the key each
-                            time. After a successful login, a cookie will be stored in the user's browser. While the
-                            cookie is still valid, users will automatically be authenticated. When the cookie expires,
-                            the user will have to login with their google account again.
+                            time. After a successful login, their session details will be stored in localStorage. While
+                            the session is still valid, users will automatically be authenticated. When the session
+                            expires, the user will have to provide their LP Plus associated email or login with their
+                            google account again.
                         </Text>
                         <br />
                         <Text>
