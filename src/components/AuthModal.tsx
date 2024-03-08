@@ -71,6 +71,11 @@ const AuthModal = ({
                                     ref={emailInput}
                                     variant="filled"
                                     p={2}
+                                    onKeyDown={async (e) => {
+                                        if (e.key === "Enter") {
+                                            await checkWhitelisted()
+                                        }
+                                    }}
                                 />
                                 <InputRightElement width="4.5rem" p={1}>
                                     <Button h="1.75rem" size="sm" onClick={async () => await checkWhitelisted()}>
