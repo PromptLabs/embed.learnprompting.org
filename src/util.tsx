@@ -50,8 +50,10 @@ export const useCheckWhitelist = () =>
         queryKey: ["checkWhitelisted"],
         queryFn: async () => {
             const emailToCheck = localStorage.getItem("whitelisted_email") || ""
-            const res = client().post("whitelisted", { json: { email: emailToCheck } })
-            const { whitelisted }: { whitelisted: boolean } = await res.json()
+            const { whitelisted }: { whitelisted: boolean } = await client()
+                .post("whitelisted", { json: { email: emailToCheck } })
+                .json()
+
             return whitelisted
         },
     }).data!
