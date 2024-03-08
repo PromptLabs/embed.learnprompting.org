@@ -64,10 +64,11 @@ const AuthModal = ({
                     <Stack>
                         <Flex direction={"column"} align={"center"}>
                             <Button onClick={() => login()}>Log in with Google</Button>
+                            <br />
                             <Heading size="sm"> or </Heading>
                             <br />
                             <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
-                            <InputGroup size="sm" w={"60%"}>
+                            <InputGroup size="sm" w={"60%"} mt={2} borderRadius={"md"}>
                                 <Input
                                     placeholder="example@mail.com"
                                     type="email"
@@ -75,7 +76,7 @@ const AuthModal = ({
                                     variant="filled"
                                     p={2}
                                 />
-                                <InputRightElement width="4.5rem" p={2}>
+                                <InputRightElement width="4.5rem" p={1}>
                                     <Button h="1.75rem" size="sm" onClick={async () => await checkWhitelisted()}>
                                         Submit
                                     </Button>
