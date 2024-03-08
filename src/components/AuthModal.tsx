@@ -36,8 +36,7 @@ const AuthModal = ({
 
         if (whitelisted) {
             localStorage.setItem("whitelisted_email", email)
-            queryClient.invalidateQueries()
-            location.reload()
+            queryClient.invalidateQueries({ queryKey: ["checkWhitelisted"] })
         }
     }
 
