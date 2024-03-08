@@ -18,10 +18,10 @@ const EmbedPage = () => {
     const { config: initialConfig, error } = useSearchParamConfig()
     const [config, setConfig] = useState<UrlConfig>(initialConfig ?? urlConfigSchema.getDefault())
     const [generating, setGenerating] = useState(false)
+    const [whitelisted, setWhitelisted] = useState(false)
 
     const apiKey = useApiKey()
     const isLoggedIn = useIsLoggedIn()
-    const whitelisted = useCheckWhitelist()
     const { mutate } = useEditApiKey()
 
     const generateWhitelistCompletion = async (): Promise<string> => {
@@ -110,6 +110,10 @@ const EmbedPage = () => {
         })
     }
 
+    useEffect(() => {
+        const isWhitelisted = useCheckWhitelist()
+        setWhitelisted(isWhitelisted)
+    }, [])
     useEffect(() => {
         // if the input has just closed & we are still generating,
         // then that means they inputted their API key and now we
