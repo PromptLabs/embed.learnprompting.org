@@ -12,9 +12,10 @@ import {
     InputRightElement,
     InputGroup,
     Center,
+    useToast,
 } from "@chakra-ui/react"
 import { useGoogleLogin } from "@react-oauth/google"
-import { queryClient, useCheckWhitelist } from "../util"
+import { queryClient, client } from "../util"
 import { useRef } from "react"
 
 const AuthModal = ({
@@ -22,6 +23,7 @@ const AuthModal = ({
     ...props
 }: Omit<ModalProps, "children"> & { onComplete: (apiKey: string) => void }) => {
     const emailInput = useRef<HTMLInputElement>(null!)
+    const toast = useToast()
 
     const login = useGoogleLogin({
         onSuccess: (tokenResponse) => {
@@ -31,11 +33,22 @@ const AuthModal = ({
         },
     })
 
-    const checkWhitelisted = (email: string) => {
-        const whitelisted = useCheckWhitelist(email)
+    const checkWhitelisted = async () => {
+        const email = emailInput.current?.value || ""
+        const res = client().post("whitelisted", { json: { email } })
+        const { whitelisted }: { whitelisted: boolean } = await res.json()
 
         if (whitelisted) {
             localStorage.setItem("whitelisted_email", email)
+            queryClient.invalidateQueries({ queryKey: ["checkWhitelisted"] })
+            location.reload()
+        } else {
+            toast({
+                status: "error",
+                title: "Invalid Email",
+                description:
+                    "It seems like the email you entered is not associated with a valid Learn Prompting Plus account. Please enter a valid email, or use your gmail to authenticate!",
+            })
         }
     }
 
@@ -51,11 +64,7 @@ const AuthModal = ({
                     <InputGroup size="sm">
                         <Input placeholder="example@mail.com" type="email" ref={emailInput} />
                         <InputRightElement width="4.5rem">
-                            <Button
-                                h="1.75rem"
-                                size="sm"
-                                onClick={(e) => checkWhitelisted(emailInput.current.value || "")}
-                            >
+                            <Button h="1.75rem" size="sm" onClick={async () => await checkWhitelisted()}>
                                 Submit
                             </Button>
                         </InputRightElement>

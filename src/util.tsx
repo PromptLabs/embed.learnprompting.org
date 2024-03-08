@@ -45,12 +45,12 @@ export const useIsLoggedIn = () =>
         },
     }).data!
 
-export const useCheckWhitelist = (email?: string) =>
+export const useCheckWhitelist = () =>
     useSuspenseQuery({
         queryKey: ["checkWhitelisted"],
         queryFn: async () => {
-            const emailToCheck = localStorage.getItem("whitelisted_email") ?? email
-            const res = client().post("whitelisted", { json: { email: emailToCheck || "" } })
+            const emailToCheck = localStorage.getItem("whitelisted_email") || ""
+            const res = client().post("whitelisted", { json: { email: emailToCheck } })
             const { whitelisted }: { whitelisted: boolean } = await res.json()
             return whitelisted
         },
