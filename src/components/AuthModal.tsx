@@ -59,20 +59,26 @@ const AuthModal = ({
             <ModalContent>
                 <ModalHeader>Please log in</ModalHeader>
                 <ModalBody>
-                    <Button onClick={() => login()}>Log in with Google</Button>
                     <Center>
-                        {" "}
-                        <Heading size="sm"> or </Heading>{" "}
+                        <Button onClick={() => login()}>Log in with Google</Button>
+                        <Heading size="sm"> or </Heading>
+                        <br />
+                        <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
+                        <InputGroup size="sm" w={"60%"}>
+                            <Input
+                                placeholder="example@mail.com"
+                                type="email"
+                                ref={emailInput}
+                                variant="filled"
+                                p={2}
+                            />
+                            <InputRightElement width="4.5rem" p={2}>
+                                <Button h="1.75rem" size="sm" onClick={async () => await checkWhitelisted()}>
+                                    Submit
+                                </Button>
+                            </InputRightElement>
+                        </InputGroup>
                     </Center>
-                    <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
-                    <InputGroup size="sm">
-                        <Input placeholder="example@mail.com" type="email" ref={emailInput} variant="filled" p={2} />
-                        <InputRightElement width="4.5rem">
-                            <Button h="1.75rem" size="sm" onClick={async () => await checkWhitelisted()}>
-                                Submit
-                            </Button>
-                        </InputRightElement>
-                    </InputGroup>
                 </ModalBody>
                 <ModalFooter />
             </ModalContent>
