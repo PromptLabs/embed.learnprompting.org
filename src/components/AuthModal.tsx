@@ -63,10 +63,6 @@ const AuthModal = ({
                 <ModalBody>
                     <Stack>
                         <Flex direction={"column"} align={"center"}>
-                            <Button onClick={() => login()}>Log in with Google</Button>
-                            <br />
-                            <Heading size="sm"> or </Heading>
-                            <br />
                             <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
                             <InputGroup size="sm" w={"60%"} mt={2} borderRadius={"md"}>
                                 <Input
@@ -82,6 +78,10 @@ const AuthModal = ({
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
+                            <br />
+                            <Heading size="sm"> or </Heading>
+                            <br />
+                            <Button onClick={() => login()}>Log in with Google</Button>
                         </Flex>
                     </Stack>
                 </ModalBody>
