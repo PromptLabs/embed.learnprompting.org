@@ -16,6 +16,7 @@ import { useEffectOnce } from "usehooks-ts"
 const EmbedPage = () => {
     const toast = useToast()
     const { config: initialConfig, error } = useSearchParamConfig()
+    const [authVisible, setAuthVisible] = useState(false)
     const [config, setConfig] = useState<UrlConfig>(initialConfig ?? urlConfigSchema.getDefault())
     const [generating, setGenerating] = useState(false)
 
@@ -148,7 +149,10 @@ const EmbedPage = () => {
                 <Playground
                     config={config}
                     generating={generating}
-                    onGenerate={handleGenerate}
+                    onGenerate={() => {
+                        handleGenerate()
+                        setAuthVisible(true)
+                    }}
                     onUpdatePrompt={(prompt) => setConfig({ ...config, prompt })}
                 />
                 <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
@@ -161,13 +165,15 @@ const EmbedPage = () => {
                 onClose={console.log}
             />
             <AuthModal
-                isOpen={!isLoggedIn && generating}
+                isOpen={authVisible && !isLoggedIn && generating}
                 onClose={console.log}
                 onComplete={(token) => {
                     localStorage.setItem("token", token)
 
                     queryClient.invalidateQueries()
                 }}
+                setGenerating={setGenerating}
+                setVisibility={setAuthVisible}
             />
         </>
     )
