@@ -16,6 +16,7 @@ import {
     Heading,
     Stack,
     Flex,
+    CloseButton,
 } from "@chakra-ui/react"
 import { useGoogleLogin } from "@react-oauth/google"
 import { queryClient, client } from "../util"
@@ -23,8 +24,14 @@ import { useRef } from "react"
 
 const AuthModal = ({
     onComplete,
+    setVisibility,
+    setGenerating,
     ...props
-}: Omit<ModalProps, "children"> & { onComplete: (apiKey: string) => void }) => {
+}: Omit<ModalProps, "children"> & {
+    onComplete: (apiKey: string) => void
+    setVisibility: (visible: boolean) => void
+    setGenerating: (visible: boolean) => void
+}) => {
     const emailInput = useRef<HTMLInputElement>(null!)
     const toast = useToast()
 
@@ -62,6 +69,13 @@ const AuthModal = ({
                 <ModalHeader>Please log in</ModalHeader>
                 <ModalBody>
                     <Stack>
+                        <CloseButton
+                            style={{ position: "absolute", right: 2, top: 2 }}
+                            onClick={() => {
+                                setVisibility(false)
+                                setGenerating(false)
+                            }}
+                        />
                         <Flex direction={"column"} align={"center"}>
                             <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
                             <InputGroup size="sm" w={"60%"} mt={2}>
