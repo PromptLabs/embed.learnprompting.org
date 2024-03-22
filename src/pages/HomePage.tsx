@@ -72,7 +72,7 @@ const HomePage = () => {
         <Box>
             <Flex direction={{ base: "column", md: "row" }} width="100%">
                 <Stack w={{ base: "80%", md: "50%" }} p="6" gap="5" h="100%" style={{ margin: "0 2%" }}>
-                    <Heading size="lg">Usage</Heading>
+                    <Heading size="lg">Usage Test</Heading>
                     <Box>
                         <Text>
                             The{" "}
