@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 import { useSearchParamConfig } from "../hooks/useSearchParamConfig"
 import { BASE_URL } from "../main"
 import { encodeUrlConfig, UrlConfig, urlConfigSchema } from "../urlconfig"
-import { Flex, Alert, AlertDescription, AlertIcon, AlertTitle, useToast, useDisclosure } from "@chakra-ui/react"
+import { Flex, Alert, AlertDescription, AlertIcon, AlertTitle, useToast, useDisclosure, Button } from "@chakra-ui/react"
 import { verifyApiKey } from "../openai"
 import { Configuration, OpenAIApi } from "openai"
 import AuthModal from "../components/AuthModal"
@@ -24,6 +24,11 @@ const EmbedPage = () => {
     const isLoggedIn = useIsLoggedIn()
     const whitelisted = useCheckWhitelist()
     const { mutate } = useEditApiKey()
+
+    const logout = () => {
+        localStorage.clear()
+        location.reload()
+    }
 
     const generateWhitelistCompletion = async (): Promise<string> => {
         const res = await client().post("whitelistCompletion", { json: { config: config } })
@@ -149,6 +154,8 @@ const EmbedPage = () => {
                 <Playground
                     config={config}
                     generating={generating}
+                    logout={logout}
+                    isLoggedIn={isLoggedIn}
                     onGenerate={() => {
                         handleGenerate()
                         setAuthVisible(true)
