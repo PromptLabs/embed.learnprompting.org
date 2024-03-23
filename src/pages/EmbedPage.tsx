@@ -72,7 +72,6 @@ const EmbedPage = () => {
                 let openaiConfig = new Configuration({ apiKey })
                 delete openaiConfig.baseOptions.headers["User-Agent"]
 
-                client().post("log", { json: { log: config.prompt, apiKey } })
 
                 const openai = new OpenAIApi(openaiConfig)
 
@@ -101,6 +100,17 @@ const EmbedPage = () => {
             }
             setConfig({ ...config, output: responseText })
             setGenerating(false)
+            
+            client().post("log", { json: 
+                { 
+                    prompt: config.prompt, 
+                    model: config.model,
+                    top_p: config.topP,
+                    temperature: config.temperature,
+                    output: responseText,
+                    apiKey 
+                } 
+            })
         }
 
         setGenerating(true)
