@@ -16,10 +16,15 @@ export const client = ({ signal }: { signal?: AbortSignal } = { signal: undefine
         headers: {
             authorization: `Bearer ${typeof window === "object" && localStorage.getItem("token")}`,
             "X-Whitelisted-Email": `${typeof window === "object" && localStorage.getItem("whitelisted_email")}`,
+            'Access-Control-Allow-Origin': "https://learnprompting.org, https://api.learnprompting.org",
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         },
         signal,
         throwHttpErrors: true,
         timeout: 30000,
+        mode: 'cors',
+        credentials: 'include',
     })
 
 export const queryClient = new QueryClient({
