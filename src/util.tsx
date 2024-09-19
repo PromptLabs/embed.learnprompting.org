@@ -20,8 +20,6 @@ export const client = ({ signal }: { signal?: AbortSignal } = { signal: undefine
         signal,
         throwHttpErrors: true,
         timeout: 30000,
-        mode: 'cors',
-        credentials: 'include',
     })
 
 export const queryClient = new QueryClient({
