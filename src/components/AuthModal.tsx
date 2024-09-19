@@ -76,8 +76,10 @@ const AuthModal = ({
                                 setGenerating(false)
                             }}
                         />
-                        <Flex direction={"column"} align={"center"}>
+                        <Flex direction={"column"} align={"center"} gap='6px'>
                             <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
+                              <Heading size="xs"  color="#089E78"
+                              >Free with Learn Prompting Plus!</Heading>
                             <InputGroup size="sm" w={"60%"} mt={2}>
                                 <Input
                                     borderRadius={"md"}
@@ -99,7 +101,7 @@ const AuthModal = ({
                                 </InputRightElement>
                             </InputGroup>
                             <br />
-                            <Heading size="sm"> or </Heading>
+                            <Heading size="sm"> or bring your own API key and</Heading>
                             <br />
                             <Button onClick={() => login()}>Log in with Google</Button>
                         </Flex>
