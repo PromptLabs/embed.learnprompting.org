@@ -122,10 +122,11 @@ const EmbedPage = () => {
         // if the input has just closed & we are still generating,
         // then that means they inputted their API key and now we
         // need to complete the generation task.
-        if (apiKey && isLoggedIn && generating) {
+        // add back isLoggedIn
+        if (apiKey && generating) {
             handleGenerate()
         }
-    }, [apiKey, isLoggedIn])
+    }, [apiKey])
 
     if (!initialConfig) {
         return (
@@ -165,14 +166,14 @@ const EmbedPage = () => {
                 <Footer editUrl={config ? `${BASE_URL}/?config=${encodeUrlConfig(config)}` : BASE_URL} />
             </Flex>
             <ApiKeyInputModal
-                isOpen={!apiKey && isLoggedIn && generating && !whitelisted}
+                isOpen={!apiKey && generating && !whitelisted} // add back isLoggedIn
                 onComplete={(newKey) => {
                     mutate(newKey)
                 }}
                 onClose={console.log}
             />
             <AuthModal
-                isOpen={authVisible && !isLoggedIn && generating}
+                isOpen={authVisible && generating} // add back !isLoggedIn
                 onClose={console.log}
                 onComplete={(token) => {
                     localStorage.setItem("token", token)
