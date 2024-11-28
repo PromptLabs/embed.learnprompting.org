@@ -19,6 +19,7 @@ const EmbedPage = () => {
     const [authVisible, setAuthVisible] = useState(false)
     const [config, setConfig] = useState<UrlConfig>(initialConfig ?? urlConfigSchema.getDefault())
     const [generating, setGenerating] = useState(false)
+    const [enteredApiKey, setEnteredApiKey] = useState(false)
 
     const apiKey = useApiKey()
     const isLoggedIn = useIsLoggedIn()
@@ -105,11 +106,13 @@ const EmbedPage = () => {
 
         setGenerating(true)
         actionAsync().catch((err) => {
-            // mutate('') Maybe provide option for user to reset their key?
+            //mutate('') Maybe provide option for user to reset their key?
             queryClient.invalidateQueries({ queryKey: ["apiKey"] })
             console.error("Unexpected generation error", err)
             toast({
                 status: "error",
+                duration: 8000,
+                isClosable: true,
                 title: "Failed to generate",
                 description:
                     "Unexpected error. Check console for more information. Make sure that you have a credit card attached to your OpenAI playground (https://platform.openai.com/playground), not ChatGPT account. This is usually the cause of this problem.",
@@ -126,6 +129,8 @@ const EmbedPage = () => {
             handleGenerate()
         }
     }, [apiKey, isLoggedIn])
+
+    useEffect(() => { apiKey ? setEnteredApiKey(true) : setEnteredApiKey(false) }, [apiKey])
 
     if (!initialConfig) {
         return (
@@ -156,6 +161,17 @@ const EmbedPage = () => {
                     generating={generating}
                     logout={logout}
                     isLoggedIn={isLoggedIn}
+                    enteredApiKey={enteredApiKey}
+                    updateApiKey={() => {
+                        mutate("")
+                        toast({
+                            status: "success",
+                            duration: 5000,
+                            isClosable: true,
+                            title: "API Key Removed",
+                            description: "Your OpenAI API key has been successfully removed.",
+                        })
+                    }}
                     onGenerate={() => {
                         handleGenerate()
                         setAuthVisible(true)
