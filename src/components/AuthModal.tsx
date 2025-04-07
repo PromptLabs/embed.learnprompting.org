@@ -17,10 +17,11 @@ import {
     Stack,
     Flex,
     CloseButton,
+    Link,
 } from "@chakra-ui/react"
 import { useGoogleLogin } from "@react-oauth/google"
 import { queryClient, client } from "../util"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 
 const AuthModal = ({
     onComplete,
@@ -34,9 +35,11 @@ const AuthModal = ({
 }) => {
     const emailInput = useRef<HTMLInputElement>(null!)
     const toast = useToast()
+    const [showGoogleLogin, setShowGoogleLogin] = useState(false)
 
     const login = useGoogleLogin({
         onSuccess: (tokenResponse) => {
+          console.log(tokenResponse)
             localStorage.setItem("token", tokenResponse.access_token)
             queryClient.invalidateQueries()
             location.reload()
@@ -78,8 +81,8 @@ const AuthModal = ({
                         />
                         <Flex direction={"column"} align={"center"} gap='6px'>
                             <Heading size="sm">Enter your Learn Prompting Plus email</Heading>
-                              <Heading size="xs"  color="#089E78"
-                              >Free with Learn Prompting Plus!</Heading>
+                            <Heading size="xs" color="#089E78"
+                            >Free with Learn Prompting Plus!</Heading>
                             <InputGroup size="sm" w={"60%"} mt={2}>
                                 <Input
                                     borderRadius={"md"}
@@ -100,10 +103,23 @@ const AuthModal = ({
                                     </Button>
                                 </InputRightElement>
                             </InputGroup>
-                            <br />
-                            <Heading size="sm"> or bring your own API key and</Heading>
-                            <br />
-                            <Button onClick={() => login()}>Log in with Google</Button>
+
+                            {!showGoogleLogin ? (
+                                <Link
+                                    fontSize="sm"
+                                    color="blue.500"
+                                    mt={4}
+                                    onClick={() => setShowGoogleLogin(true)}
+                                    textDecoration="underline"
+                                >
+                                    I don't have a Learn Prompting Plus account
+                                </Link>
+                            ) : (
+                                <Flex direction="column" align="center" mt={4}>
+                                    <Heading size="sm">Bring your own API key and</Heading>
+                                    <Button mt={2} onClick={() => login()}>Log in with Google</Button>
+                                </Flex>
+                            )}
                         </Flex>
                     </Stack>
                 </ModalBody>
